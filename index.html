@@ -3,422 +3,674 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thomas Bresseleers – Communications Portfolio</title>
+<title>Thomas Bresseleers — Communications & Visual Storytelling</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --blue: #1A3C6E;
-    --blue-light: #E8EEF7;
-    --blue-mid: #378ADD;
-    --accent: #0F6E56;
-    --text: #1a1a1a;
-    --muted: #555;
-    --border: #e0e0e0;
-    --bg: #f9f9f7;
-    --white: #fff;
-    --card-radius: 12px;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Georgia', serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --ink:#0d0d0d;
+  --ink2:#3a3a3a;
+  --ink3:#888;
+  --sand:#f5f0e8;
+  --sand2:#ece6d8;
+  --forest:#0d3d2e;
+  --forest2:#1a5c45;
+  --gold:#c8a84b;
+  --rust:#b84c2a;
+  --sky:#1a3c6e;
+  --sky2:#2a5298;
+  --white:#fff;
+  --radius:16px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--ink);overflow-x:hidden}
 
-  /* NAV */
-  nav {
-    background: var(--blue);
-    padding: 0 5%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    height: 60px;
-  }
-  .nav-logo { color: #fff; font-size: 1rem; font-family: 'Arial', sans-serif; font-weight: 700; letter-spacing: 0.5px; }
-  nav ul { list-style: none; display: flex; gap: 32px; }
-  nav ul a { color: #C8D8F0; text-decoration: none; font-family: 'Arial', sans-serif; font-size: 0.85rem; letter-spacing: 0.5px; transition: color 0.2s; }
-  nav ul a:hover { color: #fff; }
+/* ── NAV ── */
+nav{
+  position:sticky;top:0;z-index:999;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 6%;height:64px;
+  background:rgba(245,240,232,0.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid rgba(0,0,0,0.07);
+}
+.nav-name{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--forest)}
+.nav-links{display:flex;gap:28px;list-style:none}
+.nav-links a{font-size:0.82rem;font-weight:500;letter-spacing:0.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;transition:color .2s}
+.nav-links a:hover{color:var(--forest2)}
 
-  /* HERO */
-  .hero {
-    background: linear-gradient(135deg, var(--blue) 0%, #0d2a52 100%);
-    color: white;
-    padding: 80px 5% 70px;
-    display: flex;
-    align-items: center;
-    gap: 60px;
-  }
-  .hero-avatar {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: var(--blue-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5rem;
-    font-weight: 700;
-    color: var(--blue);
-    font-family: 'Arial', sans-serif;
-    flex-shrink: 0;
-    border: 3px solid rgba(255,255,255,0.2);
-  }
-  .hero-text h1 { font-size: 2.4rem; font-family: 'Arial', sans-serif; font-weight: 700; margin-bottom: 8px; }
-  .hero-text h2 { font-size: 1.1rem; color: #C8D8F0; font-weight: 400; font-family: 'Arial', sans-serif; margin-bottom: 20px; }
-  .hero-text p { font-size: 1rem; color: rgba(255,255,255,0.85); max-width: 620px; line-height: 1.7; }
-  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
-  .tag { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #C8D8F0; padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-family: 'Arial', sans-serif; }
+/* ── HERO ── */
+.hero{
+  min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;
+  padding:0 6%;
+  background:var(--forest);
+  position:relative;
+  overflow:hidden;
+}
+.hero-canvas{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 60% 80% at 80% 50%, rgba(26,92,69,0.6) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(200,168,75,0.1) 0%, transparent 60%);
+}
+.hero-left{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:80px 0;position:relative;z-index:2;
+}
+.hero-eyebrow{
+  font-size:0.72rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);margin-bottom:24px;
+  display:flex;align-items:center;gap:12px;
+}
+.hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--gold)}
+.hero-h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.8rem,5vw,4.5rem);
+  line-height:1.1;color:#fff;
+  margin-bottom:28px;
+}
+.hero-h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{
+  font-size:1rem;font-weight:300;line-height:1.8;
+  color:rgba(255,255,255,0.7);max-width:460px;
+  margin-bottom:40px;
+}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap}
+.btn{
+  padding:13px 28px;border-radius:40px;font-size:0.85rem;font-weight:500;
+  text-decoration:none;letter-spacing:0.3px;transition:all .25s;cursor:pointer;border:none;
+}
+.btn-primary{background:var(--gold);color:#1a0e00}
+.btn-primary:hover{background:#d4b05a;transform:translateY(-2px)}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.35)}
+.btn-outline:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.6)}
 
-  /* SECTIONS */
-  section { padding: 60px 5%; max-width: 1100px; margin: 0 auto; }
-  .section-label {
-    font-family: 'Arial', sans-serif;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: var(--blue);
-    font-weight: 700;
-    margin-bottom: 8px;
-  }
-  .section-title { font-size: 1.8rem; color: var(--text); margin-bottom: 32px; border-bottom: 2px solid var(--blue-light); padding-bottom: 12px; }
+.hero-right{
+  display:flex;align-items:center;justify-content:center;
+  position:relative;z-index:2;padding:60px 0;
+}
+.hero-stats{display:flex;flex-direction:column;gap:20px;width:100%;max-width:360px}
+.stat-card{
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:var(--radius);
+  padding:24px 28px;
+  transition:background .3s;
+}
+.stat-card:hover{background:rgba(255,255,255,0.12)}
+.stat-num{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--gold);line-height:1}
+.stat-label{font-size:0.82rem;color:rgba(255,255,255,0.55);margin-top:6px;font-weight:300}
+.stat-sub{font-size:0.78rem;color:rgba(255,255,255,0.35);margin-top:3px}
 
-  /* CARDS GRID */
-  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
-  .card {
-    background: var(--white);
-    border-radius: var(--card-radius);
-    border: 1px solid var(--border);
-    overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(26,60,110,0.1); }
-  .card-thumb {
-    height: 160px;
-    background: var(--blue-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 2.5rem;
-    position: relative;
-  }
-  .card-thumb.video { background: linear-gradient(135deg, #1a3c6e22, #1a3c6e44); }
-  .card-thumb.web { background: linear-gradient(135deg, #0F6E5622, #0F6E5644); }
-  .card-thumb.writing { background: linear-gradient(135deg, #37558822, #37558844); }
-  .card-badge {
-    position: absolute;
-    top: 12px;
-    left: 12px;
-    background: var(--blue);
-    color: white;
-    font-size: 0.7rem;
-    font-family: 'Arial', sans-serif;
-    font-weight: 700;
-    letter-spacing: 1px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    text-transform: uppercase;
-  }
-  .card-badge.green { background: var(--accent); }
-  .card-badge.gray { background: #555; }
-  .card-body { padding: 20px; }
-  .card-body h3 { font-size: 1.05rem; font-family: 'Arial', sans-serif; font-weight: 700; margin-bottom: 6px; color: var(--text); }
-  .card-body p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
-  .card-link {
-    display: inline-block;
-    margin-top: 14px;
-    padding: 7px 18px;
-    border: 1.5px solid var(--blue);
-    color: var(--blue);
-    border-radius: 6px;
-    font-size: 0.82rem;
-    font-family: 'Arial', sans-serif;
-    font-weight: 700;
-    text-decoration: none;
-    transition: background 0.2s, color 0.2s;
-  }
-  .card-link:hover { background: var(--blue); color: white; }
+/* ── SECTION WRAP ── */
+.section{padding:90px 6%}
+.section-alt{background:var(--sand2)}
+.label{
+  display:inline-flex;align-items:center;gap:10px;
+  font-size:0.7rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;
+  color:var(--forest2);margin-bottom:16px;
+}
+.label::after{content:'';flex:1;height:1px;background:var(--forest2);opacity:0.3;min-width:40px}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3rem);color:var(--ink);margin-bottom:12px;line-height:1.15}
+.section-intro{font-size:1rem;font-weight:300;color:var(--ink2);line-height:1.8;max-width:600px;margin-bottom:56px}
 
-  /* SKILLS GRID */
-  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
-  .skill-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 20px;
-  }
-  .skill-card h4 { font-family: 'Arial', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--blue); margin-bottom: 10px; }
-  .skill-list { list-style: none; font-size: 0.85rem; color: var(--muted); }
-  .skill-list li { padding: 3px 0; border-bottom: 1px solid #f0f0f0; }
-  .skill-list li:last-child { border-bottom: none; }
-  .skill-list li::before { content: "▸ "; color: var(--blue); }
+/* ── WORK FILTER ── */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:40px}
+.filter-btn{
+  padding:8px 20px;border-radius:40px;border:1.5px solid rgba(0,0,0,0.15);
+  font-size:0.8rem;font-weight:500;background:transparent;color:var(--ink2);
+  cursor:pointer;transition:all .2s;
+}
+.filter-btn.active,.filter-btn:hover{background:var(--forest);color:#fff;border-color:var(--forest)}
 
-  /* EXPERIENCE TIMELINE */
-  .timeline { position: relative; padding-left: 32px; }
-  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--blue-light); }
-  .timeline-item { position: relative; margin-bottom: 36px; }
-  .timeline-item::before {
-    content: '';
-    position: absolute;
-    left: -28px;
-    top: 6px;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background: var(--blue);
-    border: 2px solid white;
-    box-shadow: 0 0 0 2px var(--blue-light);
-  }
-  .timeline-item h3 { font-family: 'Arial', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); }
-  .timeline-item .org { color: var(--blue); font-size: 0.88rem; font-family: 'Arial', sans-serif; }
-  .timeline-item .dates { color: var(--muted); font-size: 0.82rem; font-family: 'Arial', sans-serif; margin-bottom: 6px; }
-  .timeline-item p { font-size: 0.88rem; color: var(--muted); }
+/* ── PROJECT GRID ── */
+.projects{display:grid;grid-template-columns:repeat(12,1fr);gap:20px}
+.proj{
+  border-radius:var(--radius);overflow:hidden;
+  cursor:pointer;transition:transform .3s;position:relative;
+}
+.proj:hover{transform:translateY(-6px)}
+.proj-col-8{grid-column:span 8}
+.proj-col-4{grid-column:span 4}
+.proj-col-6{grid-column:span 6}
+.proj-thumb{
+  height:320px;display:flex;align-items:flex-end;padding:28px;
+  position:relative;overflow:hidden;
+}
+.proj-col-4 .proj-thumb{height:320px}
+.proj-thumb-bg{
+  position:absolute;inset:0;background-size:cover;background-position:center;
+  transition:transform .5s;
+}
+.proj:hover .proj-thumb-bg{transform:scale(1.04)}
+.proj-thumb-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(5,20,15,0.92) 0%, rgba(5,20,15,0.2) 60%, transparent 100%);
+}
+.proj-type{
+  position:absolute;top:20px;left:20px;
+  background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.2);
+  color:#fff;font-size:0.68rem;font-weight:500;letter-spacing:1.5px;
+  text-transform:uppercase;padding:5px 14px;border-radius:30px;
+}
+.proj-info{position:relative;z-index:1}
+.proj-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff;margin-bottom:6px;line-height:1.3}
+.proj-desc{font-size:0.82rem;font-weight:300;color:rgba(255,255,255,0.65);line-height:1.5}
+.proj-link{
+  display:inline-flex;align-items:center;gap:6px;
+  margin-top:14px;color:var(--gold);font-size:0.8rem;font-weight:500;
+  text-decoration:none;transition:gap .2s;
+}
+.proj-link:hover{gap:10px}
 
-  /* CONTACT */
-  .contact-section {
-    background: var(--blue);
-    color: white;
-    padding: 60px 5%;
-    text-align: center;
-  }
-  .contact-section h2 { font-size: 1.8rem; margin-bottom: 12px; }
-  .contact-section p { color: #C8D8F0; margin-bottom: 28px; font-size: 1rem; }
-  .contact-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-  .contact-btn {
-    padding: 12px 28px;
-    border: 1.5px solid rgba(255,255,255,0.4);
-    color: white;
-    border-radius: 8px;
-    font-family: 'Arial', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 700;
-    text-decoration: none;
-    transition: background 0.2s;
-  }
-  .contact-btn:hover { background: rgba(255,255,255,0.1); }
-  .contact-btn.primary { background: white; color: var(--blue); border-color: white; }
-  .contact-btn.primary:hover { background: var(--blue-light); }
+/* ── SKILLS ── */
+.skills-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+.skill-group{margin-bottom:32px}
+.skill-group-title{font-size:0.75rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:16px}
+.skill-item{margin-bottom:14px}
+.skill-name-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.skill-name{font-size:0.9rem;font-weight:400;color:var(--ink2)}
+.skill-pct{font-size:0.78rem;font-weight:500;color:var(--forest2)}
+.skill-bar{height:4px;background:rgba(0,0,0,0.08);border-radius:4px;overflow:hidden}
+.skill-fill{
+  height:100%;background:var(--forest2);border-radius:4px;
+  width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1);
+}
+.skills-right{padding:40px;background:var(--forest);border-radius:var(--radius);color:#fff}
+.skills-right h3{font-family:'Playfair Display',serif;font-size:1.6rem;color:#fff;margin-bottom:8px}
+.skills-right p{font-size:0.9rem;font-weight:300;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:28px}
+.tools-grid{display:flex;flex-wrap:wrap;gap:10px}
+.tool-pill{
+  padding:6px 16px;background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.15);
+  border-radius:30px;font-size:0.78rem;color:rgba(255,255,255,0.8);
+}
 
-  footer { background: #0d2a52; color: #8aadcc; text-align: center; padding: 20px; font-family: 'Arial', sans-serif; font-size: 0.8rem; }
+/* ── TIMELINE ── */
+.timeline{position:relative;padding-left:0}
+.tl-item{
+  display:grid;grid-template-columns:160px 1fr;
+  gap:0 32px;margin-bottom:0;
+  position:relative;
+}
+.tl-item::after{
+  content:'';position:absolute;
+  left:159px;top:8px;bottom:-40px;
+  width:1px;background:rgba(0,0,0,0.1);
+}
+.tl-item:last-child::after{display:none}
+.tl-dates{
+  text-align:right;padding-top:2px;padding-bottom:40px;
+}
+.tl-dates span{font-size:0.78rem;font-weight:500;color:var(--forest2)}
+.tl-dates small{display:block;font-size:0.72rem;color:var(--ink3);margin-top:2px}
+.tl-body{
+  padding-bottom:40px;padding-left:32px;border-left:none;
+  position:relative;
+}
+.tl-body::before{
+  content:'';position:absolute;
+  left:-5px;top:7px;
+  width:10px;height:10px;border-radius:50%;
+  background:var(--forest2);
+  border:2px solid var(--sand2);
+}
+.tl-role{font-size:1rem;font-weight:500;color:var(--ink);margin-bottom:3px}
+.tl-org{font-size:0.85rem;color:var(--forest2);font-weight:400;margin-bottom:8px}
+.tl-desc{font-size:0.85rem;font-weight:300;color:var(--ink2);line-height:1.7}
 
-  @media (max-width: 600px) {
-    .hero { flex-direction: column; gap: 24px; padding: 40px 5%; }
-    .hero-text h1 { font-size: 1.6rem; }
-    nav ul { gap: 16px; }
-  }
+/* ── CONTACT ── */
+.contact-wrap{
+  background:var(--forest);
+  border-radius:var(--radius);
+  padding:64px;
+  display:grid;grid-template-columns:1fr 1fr;gap:60px;
+  align-items:center;
+}
+.contact-left h2{font-family:'Playfair Display',serif;font-size:2.4rem;color:#fff;margin-bottom:16px;line-height:1.2}
+.contact-left p{font-size:0.95rem;font-weight:300;color:rgba(255,255,255,0.65);line-height:1.8}
+.contact-links{display:flex;flex-direction:column;gap:16px}
+.contact-item{
+  display:flex;align-items:center;gap:16px;
+  padding:18px 24px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.1);
+  border-radius:12px;
+  text-decoration:none;color:#fff;
+  transition:background .2s;
+}
+.contact-item:hover{background:rgba(255,255,255,0.13)}
+.contact-icon{width:40px;height:40px;border-radius:10px;background:rgba(200,168,75,0.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.contact-item-text strong{display:block;font-size:0.88rem;font-weight:500}
+.contact-item-text span{font-size:0.78rem;color:rgba(255,255,255,0.5)}
+
+footer{text-align:center;padding:32px;background:var(--forest);border-top:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.3);font-size:0.78rem}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;padding-top:40px}
+  .hero-right{padding:0 0 60px}
+  .hero-stats{flex-direction:row;flex-wrap:wrap}
+  .stat-card{flex:1;min-width:140px}
+  .proj-col-8,.proj-col-4,.proj-col-6{grid-column:span 12}
+  .skills-layout{grid-template-columns:1fr}
+  .contact-wrap{grid-template-columns:1fr;padding:40px 28px}
+  .tl-item{grid-template-columns:1fr}
+  .tl-item::after{display:none}
+  .tl-dates{text-align:left;padding-bottom:4px}
+}
+@media(max-width:600px){
+  .nav-links{gap:14px}
+  .hero-h1{font-size:2.4rem}
+  .section{padding:60px 5%}
+  .projects{gap:12px}
+}
 </style>
 </head>
 <body>
 
 <nav>
-  <span class="nav-logo">Thomas Bresseleers</span>
-  <ul>
+  <span class="nav-name">Thomas Bresseleers</span>
+  <ul class="nav-links">
     <li><a href="#work">Work</a></li>
     <li><a href="#skills">Skills</a></li>
-    <li><a href="#experience">Experience</a></li>
+    <li><a href="#journey">Journey</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
 
-<div class="hero">
-  <div class="hero-avatar">TB</div>
-  <div class="hero-text">
-    <h1>Thomas Bresseleers</h1>
-    <h2>Communications & Project Management Professional · Banjul, The Gambia</h2>
-    <p>Bilingual (FR/EN) communications specialist with 3+ years of experience in international institutional communication. Currently Administrative & Communications Manager at MRC Unit The Gambia (LSHTM). Combining strategic communication, audiovisual production and multi-stakeholder coordination.</p>
-    <div class="hero-tags">
-      <span class="tag">Strategic Communication</span>
-      <span class="tag">Audiovisual Production</span>
-      <span class="tag">UNODC · MRC/LSHTM</span>
-      <span class="tag">M.Sc. KU Leuven</span>
-      <span class="tag">French · English</span>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-canvas"></div>
+  <div class="hero-left">
+    <div class="hero-eyebrow">Communications · Storytelling · Impact</div>
+    <h1 class="hero-h1">
+      Words, images<br>& <em>impact</em> — from<br>Banjul to the world.
+    </h1>
+    <p class="hero-sub">
+      Bilingual communications professional blending institutional strategy, documentary filmmaking and digital storytelling. Currently at MRC Unit The Gambia — London School of Hygiene & Tropical Medicine.
+    </p>
+    <div class="hero-cta">
+      <a href="#work" class="btn btn-primary">View my work</a>
+      <a href="#contact" class="btn btn-outline">Get in touch</a>
     </div>
   </div>
-</div>
-
-<section id="work">
-  <div class="section-label">Portfolio</div>
-  <h2 class="section-title">Selected Work</h2>
-  <div class="cards">
-
-    <div class="card">
-      <div class="card-thumb video">
-        🎬
-        <span class="card-badge">Documentary</span>
+  <div class="hero-right">
+    <div class="hero-stats">
+      <div class="stat-card">
+        <div class="stat-num">3+</div>
+        <div class="stat-label">Years in international institutions</div>
+        <div class="stat-sub">UNODC · MRC/LSHTM</div>
       </div>
-      <div class="card-body">
-        <h3>Gender-Based Violence Documentary – Action Aid</h3>
-        <p>Co-director and sound recordist. Documentary on gender-based sexual violence in rural Gambia, produced for Action Aid. Full production pipeline: development, shooting, editing.</p>
-        <a href="https://www.youtube.com/watch?v=i0cR9EuhOp4" target="_blank" class="card-link">Watch on YouTube →</a>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div class="stat-card">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Documentary films</div>
+          <div class="stat-sub">Full production</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">2</div>
+          <div class="stat-label">Languages</div>
+          <div class="stat-sub">FR · EN fluent</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num">M.Sc.</div>
+        <div class="stat-label">Communication Sciences</div>
+        <div class="stat-sub">KU Leuven · Digital Media & Society</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section class="section" id="work">
+  <div class="label">Portfolio</div>
+  <h2 class="section-title">Selected work</h2>
+  <p class="section-intro">A selection of projects spanning documentary production, institutional communication strategy and digital content — all created for organisations making real impact in West Africa and beyond.</p>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="filterProjects('all',this)">All</button>
+    <button class="filter-btn" onclick="filterProjects('film',this)">Film & Video</button>
+    <button class="filter-btn" onclick="filterProjects('comms',this)">Communications</button>
+    <button class="filter-btn" onclick="filterProjects('digital',this)">Digital</button>
+  </div>
+
+  <div class="projects" id="projects-grid">
+
+    <div class="proj proj-col-8" data-cat="film">
+      <div class="proj-thumb" style="height:380px">
+        <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#0d3d2e,#1a5c45)">
+          <svg width="100%" height="100%" viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg" style="opacity:0.4">
+            <circle cx="300" cy="190" r="60" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
+            <circle cx="300" cy="190" r="120" fill="none" stroke="#c8a84b" stroke-width="0.7" stroke-dasharray="4 8"/>
+            <circle cx="300" cy="190" r="180" fill="none" stroke="#c8a84b" stroke-width="0.4" stroke-dasharray="2 10"/>
+            <polygon points="285,168 285,212 325,190" fill="#c8a84b"/>
+          </svg>
+        </div>
+        <div class="proj-thumb-overlay"></div>
+        <span class="proj-type">Documentary Film</span>
+        <div class="proj-info">
+          <h3 class="proj-title">Gender-Based Violence in Rural Gambia</h3>
+          <p class="proj-desc">Full production documentary for Action Aid — development, shooting, sound design & post-production</p>
+          <a href="https://www.youtube.com/watch?v=i0cR9EuhOp4" target="_blank" class="proj-link">Watch film ›</a>
+        </div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-thumb video">
-        🎬
-        <span class="card-badge">Commercial</span>
-      </div>
-      <div class="card-body">
-        <h3>Kololi Beach Resort – Hotel Ad</h3>
-        <p>Co-director and sound recordist for a commercial advertisement for Kololi Beach Resort, The Gambia. Full post-production including sound design and colour grading.</p>
-        <a href="https://www.youtube.com/watch?v=NbCgR2BaSiI" target="_blank" class="card-link">Watch on YouTube →</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-thumb video">
-        🎬
-        <span class="card-badge">Promo Film</span>
-      </div>
-      <div class="card-body">
-        <h3>Wide Open Walls – Graffiti Artist Promo</h3>
-        <p>Sound recordist and cameraman for a promotional film on the work of a graffiti artist. Image and sound capture, editing and post-production.</p>
-        <a href="https://www.youtube.com/watch?v=lWFuv9N-LbA" target="_blank" class="card-link">Watch on YouTube →</a>
+    <div class="proj proj-col-4" data-cat="film">
+      <div class="proj-thumb" style="height:380px">
+        <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#1a3c6e,#2a5298)">
+          <svg width="100%" height="100%" viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg" style="opacity:0.35">
+            <rect x="40" y="60" width="220" height="140" rx="8" fill="none" stroke="#fff" stroke-width="1.5"/>
+            <rect x="60" y="80" width="180" height="100" rx="4" fill="rgba(255,255,255,0.08)"/>
+            <line x1="40" y1="240" x2="260" y2="240" stroke="#fff" stroke-width="1" stroke-dasharray="6 4"/>
+            <circle cx="80" cy="280" r="20" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
+            <circle cx="150" cy="280" r="20" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
+            <circle cx="220" cy="280" r="20" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="proj-thumb-overlay"></div>
+        <span class="proj-type">Commercial</span>
+        <div class="proj-info">
+          <h3 class="proj-title">Kololi Beach Resort</h3>
+          <p class="proj-desc">Co-director & sound recordist — hotel advertisement</p>
+          <a href="https://www.youtube.com/watch?v=NbCgR2BaSiI" target="_blank" class="proj-link">Watch film ›</a>
+        </div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-thumb web">
-        🌐
-        <span class="card-badge green">Web & Strategy</span>
-      </div>
-      <div class="card-body">
-        <h3>HDRWA Platform – Communications Strategy</h3>
-        <p>Developed and implemented the full communications plan for the Health Data Research West Africa platform (MRC/LSHTM). Managed website (Drupal), social media, newsletters and stakeholder reporting.</p>
-        <a href="https://hdrwa.mrc.gm" target="_blank" class="card-link">Visit Platform →</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-thumb writing">
-        ✍️
-        <span class="card-badge gray">Writing</span>
-      </div>
-      <div class="card-body">
-        <h3>UNODC West Africa – Press Releases & Reports</h3>
-        <p>Official communication materials, press releases, articles and newsletters for UNODC field office in Banjul and regional office in Dakar. Multilingual content (FR/EN).</p>
-        <a href="#contact" class="card-link">Request Samples →</a>
+    <div class="proj proj-col-4" data-cat="film">
+      <div class="proj-thumb">
+        <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#2d1a0e,#6b3520)">
+          <svg width="100%" height="100%" viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg" style="opacity:0.4">
+            <path d="M60 280 Q150 80 240 280" fill="none" stroke="#c8a84b" stroke-width="2"/>
+            <circle cx="60" cy="280" r="5" fill="#c8a84b"/>
+            <circle cx="240" cy="280" r="5" fill="#c8a84b"/>
+            <circle cx="150" cy="120" r="8" fill="#c8a84b" opacity="0.6"/>
+          </svg>
+        </div>
+        <div class="proj-thumb-overlay"></div>
+        <span class="proj-type">Promo Film</span>
+        <div class="proj-info">
+          <h3 class="proj-title">Wide Open Walls</h3>
+          <p class="proj-desc">Graffiti artist promotional video — image & sound</p>
+          <a href="https://www.youtube.com/watch?v=lWFuv9N-LbA" target="_blank" class="proj-link">Watch film ›</a>
+        </div>
       </div>
     </div>
 
-    <div class="card">
-      <div class="card-thumb writing">
-        📋
-        <span class="card-badge gray">Events</span>
+    <div class="proj proj-col-8" data-cat="comms digital">
+      <div class="proj-thumb">
+        <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#04342c,#0d3d2e,#0f6e56)">
+          <svg width="100%" height="100%" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg" style="opacity:0.3">
+            <rect x="60" y="60" width="200" height="28" rx="4" fill="#9fe1cb"/>
+            <rect x="60" y="102" width="320" height="12" rx="3" fill="#5dcaa5" opacity="0.6"/>
+            <rect x="60" y="124" width="280" height="12" rx="3" fill="#5dcaa5" opacity="0.4"/>
+            <rect x="60" y="146" width="240" height="12" rx="3" fill="#5dcaa5" opacity="0.3"/>
+            <rect x="400" y="60" width="160" height="260" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+            <rect x="420" y="80" width="120" height="8" rx="2" fill="#9fe1cb" opacity="0.5"/>
+            <rect x="420" y="98" width="80" height="8" rx="2" fill="#9fe1cb" opacity="0.3"/>
+            <rect x="420" y="140" width="120" height="60" rx="4" fill="rgba(159,225,203,0.1)"/>
+            <circle cx="480" cy="220" r="25" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
+            <path d="M472 220 l6 6 l12-12" stroke="#c8a84b" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <div class="proj-thumb-overlay"></div>
+        <span class="proj-type">Strategy · Digital · Web</span>
+        <div class="proj-info">
+          <h3 class="proj-title">HDRWA Platform — Communications Strategy</h3>
+          <p class="proj-desc">End-to-end communications plan, website management (Drupal), social media & stakeholder reporting for MRC/LSHTM health data platform</p>
+          <a href="https://hdrwa.mrc.gm" target="_blank" class="proj-link">Visit platform ›</a>
+        </div>
       </div>
-      <div class="card-body">
-        <h3>International Workshop – Abidjan (UNODC)</h3>
-        <p>Full communication and logistics support for international workshop on "Strengthening Judicial Cooperation against Transnational Organised Crime" — banners, press release, badges, social media coverage.</p>
-        <a href="#contact" class="card-link">Request Samples →</a>
+    </div>
+
+    <div class="proj proj-col-6" data-cat="comms">
+      <div class="proj-thumb">
+        <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#0d1a3a,#1a3c6e)">
+          <svg width="100%" height="100%" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" style="opacity:0.35">
+            <circle cx="200" cy="140" r="50" fill="none" stroke="#fff" stroke-width="1.5"/>
+            <circle cx="120" cy="220" r="35" fill="none" stroke="#c8a84b" stroke-width="1"/>
+            <circle cx="280" cy="220" r="35" fill="none" stroke="#c8a84b" stroke-width="1"/>
+            <line x1="160" y1="165" x2="145" y2="195" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="240" y1="165" x2="255" y2="195" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
+            <line x1="155" y1="220" x2="245" y2="220" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="4 4"/>
+          </svg>
+        </div>
+        <div class="proj-thumb-overlay"></div>
+        <span class="proj-type">UN · Communications</span>
+        <div class="proj-info">
+          <h3 class="proj-title">UNODC West Africa — Press & Reporting</h3>
+          <p class="proj-desc">Official press releases, newsletters & event communication across Gambia and Senegal</p>
+          <a href="#contact" class="proj-link">Request samples ›</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="proj proj-col-6" data-cat="comms">
+      <div class="proj-thumb">
+        <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#2d0e1a,#7a1a35)">
+          <svg width="100%" height="100%" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" style="opacity:0.35">
+            <rect x="80" y="80" width="240" height="180" rx="6" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
+            <line x1="80" y1="120" x2="320" y2="120" stroke="#c8a84b" stroke-width="0.8" stroke-dasharray="3 6"/>
+            <rect x="110" y="140" width="60" height="30" rx="3" fill="rgba(200,168,75,0.15)" stroke="rgba(200,168,75,0.4)" stroke-width="1"/>
+            <rect x="190" y="140" width="60" height="30" rx="3" fill="rgba(200,168,75,0.15)" stroke="rgba(200,168,75,0.4)" stroke-width="1"/>
+            <rect x="110" y="190" width="140" height="12" rx="3" fill="rgba(255,255,255,0.15)"/>
+            <rect x="110" y="212" width="100" height="12" rx="3" fill="rgba(255,255,255,0.1)"/>
+          </svg>
+        </div>
+        <div class="proj-thumb-overlay"></div>
+        <span class="proj-type">Events · Logistics</span>
+        <div class="proj-info">
+          <h3 class="proj-title">International Workshop Abidjan — UNODC</h3>
+          <p class="proj-desc">Full event communication: banners, press release, badges, social coverage for judicial cooperation summit</p>
+          <a href="#contact" class="proj-link">Request samples ›</a>
+        </div>
       </div>
     </div>
 
   </div>
 </section>
 
-<section id="skills">
-  <div class="section-label">Expertise</div>
-  <h2 class="section-title">Skills & Tools</h2>
-  <div class="skills-grid">
-    <div class="skill-card">
-      <h4>Communication & Writing</h4>
-      <ul class="skill-list">
-        <li>Strategic communication plans</li>
-        <li>Press releases & articles</li>
-        <li>Newsletters & donor reports</li>
-        <li>Social media management</li>
-        <li>Stakeholder engagement</li>
-      </ul>
+<!-- SKILLS -->
+<section class="section section-alt" id="skills">
+  <div class="label">Expertise</div>
+  <h2 class="section-title">Skills & tools</h2>
+  <p class="section-intro">A dual background in communication sciences and audiovisual production gives me an unusual range — from crafting a donor report to directing a documentary.</p>
+
+  <div class="skills-layout">
+    <div>
+      <div class="skill-group">
+        <div class="skill-group-title">Communication</div>
+        <div class="skill-item">
+          <div class="skill-name-row"><span class="skill-name">Strategic communication planning</span><span class="skill-pct">95%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-w="95"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name-row"><span class="skill-name">Press releases & editorial writing</span><span class="skill-pct">92%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-w="92"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name-row"><span class="skill-name">Stakeholder & partner coordination</span><span class="skill-pct">90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-w="90"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name-row"><span class="skill-name">Social media management</span><span class="skill-pct">85%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-w="85"></div></div>
+        </div>
+      </div>
+      <div class="skill-group">
+        <div class="skill-group-title">Audiovisual</div>
+        <div class="skill-item">
+          <div class="skill-name-row"><span class="skill-name">Film direction & production</span><span class="skill-pct">90%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-w="90"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name-row"><span class="skill-name">Video editing (Premiere Pro)</span><span class="skill-pct">88%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-w="88"></div></div>
+        </div>
+        <div class="skill-item">
+          <div class="skill-name-row"><span class="skill-name">Sound recording & mixing</span><span class="skill-pct">85%</span></div>
+          <div class="skill-bar"><div class="skill-fill" data-w="85"></div></div>
+        </div>
+      </div>
     </div>
-    <div class="skill-card">
-      <h4>Audiovisual Production</h4>
-      <ul class="skill-list">
-        <li>Film direction & production</li>
-        <li>Video editing (Premiere Pro)</li>
-        <li>Sound recording & mixing</li>
-        <li>Photography (Lightroom)</li>
-        <li>Final Cut Pro · Pro Tools</li>
-      </ul>
-    </div>
-    <div class="skill-card">
-      <h4>Digital & Web</h4>
-      <ul class="skill-list">
-        <li>Drupal CMS</li>
-        <li>Mailchimp</li>
-        <li>Canva</li>
-        <li>MS Office Suite</li>
-        <li>Social media analytics</li>
-      </ul>
-    </div>
-    <div class="skill-card">
-      <h4>Project Coordination</h4>
-      <ul class="skill-list">
-        <li>Multi-stakeholder coordination</li>
-        <li>Event & workshop logistics</li>
-        <li>Reporting & documentation</li>
-        <li>Compliance & contracts</li>
-        <li>Capacity building support</li>
-      </ul>
-    </div>
-    <div class="skill-card">
-      <h4>Languages</h4>
-      <ul class="skill-list">
-        <li>French — Native</li>
-        <li>English — Fluent (C1/C2)</li>
-        <li>Spanish — Basic</li>
-        <li>Wolof — Basic</li>
-      </ul>
+
+    <div class="skills-right">
+      <h3>Tools & platforms</h3>
+      <p>Software and platforms I use daily — from content creation to project management.</p>
+      <div class="tools-grid">
+        <span class="tool-pill">Adobe Premiere Pro</span>
+        <span class="tool-pill">Final Cut Pro</span>
+        <span class="tool-pill">Pro Tools</span>
+        <span class="tool-pill">Lightroom</span>
+        <span class="tool-pill">Canva</span>
+        <span class="tool-pill">Drupal CMS</span>
+        <span class="tool-pill">Mailchimp</span>
+        <span class="tool-pill">MS Office</span>
+        <span class="tool-pill">Google Analytics</span>
+        <span class="tool-pill">WordPress</span>
+      </div>
+      <div style="margin-top:32px;padding-top:28px;border-top:1px solid rgba(255,255,255,0.1)">
+        <div class="skill-group-title" style="color:rgba(255,255,255,0.4);margin-bottom:14px">Languages</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:0.9rem;color:#fff">French</span>
+            <span style="font-size:0.78rem;background:rgba(200,168,75,0.2);color:var(--gold);padding:3px 12px;border-radius:20px">Native</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:0.9rem;color:#fff">English</span>
+            <span style="font-size:0.78rem;background:rgba(200,168,75,0.2);color:var(--gold);padding:3px 12px;border-radius:20px">Fluent · C1/C2</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font-size:0.9rem;color:rgba(255,255,255,0.5)">Spanish · Wolof</span>
+            <span style="font-size:0.78rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.4);padding:3px 12px;border-radius:20px">Basic</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
-<section id="experience">
-  <div class="section-label">Background</div>
-  <h2 class="section-title">Experience & Education</h2>
+<!-- JOURNEY -->
+<section class="section" id="journey">
+  <div class="label">Background</div>
+  <h2 class="section-title">The journey</h2>
+  <p class="section-intro">From Brussels film school to UN offices and international health research — a path built on storytelling, communication and a desire to work where it matters.</p>
+
   <div class="timeline">
-    <div class="timeline-item">
-      <h3>Administrative & Communications Manager</h3>
-      <div class="org">MRC Unit The Gambia – London School of Hygiene & Tropical Medicine</div>
-      <div class="dates">February 2023 – Present · Banjul, The Gambia</div>
-      <p>Communications strategy for the HDRWA platform, website & social media management, stakeholder coordination, compliance with legal and contractual requirements.</p>
+    <div class="tl-item">
+      <div class="tl-dates"><span>2023 — Now</span><small>Banjul, Gambia</small></div>
+      <div class="tl-body">
+        <div class="tl-role">Administrative & Communications Manager</div>
+        <div class="tl-org">MRC Unit The Gambia — London School of Hygiene & Tropical Medicine</div>
+        <div class="tl-desc">Communications strategy for the Health Data Research West Africa platform. Website (Drupal), social media, press materials, stakeholder coordination and compliance management.</div>
+      </div>
     </div>
-    <div class="timeline-item">
-      <h3>International Consultant – Communications & Administration</h3>
-      <div class="org">UNODC – Office des Nations Unies contre la Drogue et le Crime</div>
-      <div class="dates">Nov 2022 – Dec 2022 · Banjul / Dakar</div>
-      <p>Official communication materials, multilingual content, partner coordination, workshop organisation across West Africa.</p>
+    <div class="tl-item">
+      <div class="tl-dates"><span>Nov–Dec 2022</span><small>Banjul / Dakar</small></div>
+      <div class="tl-body">
+        <div class="tl-role">International Consultant — Communications</div>
+        <div class="tl-org">UNODC — United Nations Office on Drugs and Crime</div>
+        <div class="tl-desc">Official communication materials, multilingual content production, partner facilitation and workshop organisation across West Africa.</div>
+      </div>
     </div>
-    <div class="timeline-item">
-      <h3>Communication Intern – Drug Control & Crime Prevention</h3>
-      <div class="org">UNODC – Office des Nations Unies contre la Drogue et le Crime</div>
-      <div class="dates">Nov 2021 – Jan 2022 · Banjul, The Gambia</div>
-      <p>Public information materials, newsletters, translation, international workshop support in Abidjan.</p>
+    <div class="tl-item">
+      <div class="tl-dates"><span>2021–2022</span><small>Banjul, Gambia</small></div>
+      <div class="tl-body">
+        <div class="tl-role">Communication Intern — Drug Control & Crime Prevention</div>
+        <div class="tl-org">UNODC — United Nations Office on Drugs and Crime</div>
+        <div class="tl-desc">Public information materials, press releases, newsletter writing and translation, international workshop support in Abidjan.</div>
+      </div>
     </div>
-    <div class="timeline-item">
-      <h3>M.Sc. Communication Sciences – Digital Media & Society</h3>
-      <div class="org">KU Leuven</div>
-      <div class="dates">2019 – 2022 · Leuven, Belgium</div>
-      <p>Specialisation in digital media, communication strategy and society.</p>
+    <div class="tl-item">
+      <div class="tl-dates"><span>2019–2022</span><small>Leuven, Belgium</small></div>
+      <div class="tl-body">
+        <div class="tl-role">M.Sc. Communication Sciences — Digital Media & Society</div>
+        <div class="tl-org">KU Leuven</div>
+        <div class="tl-desc">Specialisation in digital communication, media theory and societal impact of communication technologies.</div>
+      </div>
     </div>
-    <div class="timeline-item">
-      <h3>Bachelor – Image Techniques, Cinematography</h3>
-      <div class="org">INRACI – Haute École Libre de Bruxelles</div>
-      <div class="dates">2014 – 2019 · Brussels, Belgium</div>
-      <p>Full production training: development, pre-production, production, post-production.</p>
+    <div class="tl-item">
+      <div class="tl-dates"><span>2014–2019</span><small>Brussels, Belgium</small></div>
+      <div class="tl-body">
+        <div class="tl-role">Bachelor — Image Techniques, Cinematography</div>
+        <div class="tl-org">INRACI — Haute École Libre de Bruxelles</div>
+        <div class="tl-desc">Complete audiovisual production training — development, pre-production, shooting, editing and post-production.</div>
+      </div>
     </div>
   </div>
 </section>
 
-<div class="contact-section" id="contact">
-  <h2>Let's work together</h2>
-  <p>Available for communications, project coordination and audiovisual production roles in The Gambia and internationally.</p>
-  <div class="contact-links">
-    <a href="mailto:[VOTRE EMAIL]" class="contact-btn primary">📧 Send an email</a>
-    <a href="https://linkedin.com/in/[VOTRE PROFIL]" target="_blank" class="contact-btn">LinkedIn</a>
-    <a href="#work" class="contact-btn">View my work</a>
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="contact-wrap">
+    <div class="contact-left">
+      <h2>Let's build something that matters.</h2>
+      <p>Available for communications, project management and audiovisual production roles — in The Gambia and internationally. Open to NGO, UN, and development sector opportunities.</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:[VOTRE EMAIL]" class="contact-item">
+        <div class="contact-icon">✉</div>
+        <div class="contact-item-text">
+          <strong>[VOTRE EMAIL]</strong>
+          <span>Send me an email</span>
+        </div>
+      </a>
+      <a href="https://linkedin.com/in/[VOTRE PROFIL]" target="_blank" class="contact-item">
+        <div class="contact-icon">in</div>
+        <div class="contact-item-text">
+          <strong>LinkedIn</strong>
+          <span>Connect professionally</span>
+        </div>
+      </a>
+      <a href="#work" class="contact-item">
+        <div class="contact-icon">▶</div>
+        <div class="contact-item-text">
+          <strong>View my films on YouTube</strong>
+          <span>Documentary & commercial work</span>
+        </div>
+      </a>
+    </div>
   </div>
-</div>
+</section>
 
-<footer>
-  <p>© 2026 Thomas Bresseleers · Communications & Project Management · Banjul, The Gambia</p>
-</footer>
+<footer>© 2026 Thomas Bresseleers · Communications & Visual Storytelling · Banjul, The Gambia</footer>
 
+<script>
+function filterProjects(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.proj').forEach(p => {
+    const cats = p.dataset.cat || '';
+    if (cat === 'all' || cats.includes(cat)) {
+      p.style.display = '';
+      p.style.opacity = '0';
+      p.style.transform = 'translateY(20px)';
+      setTimeout(() => { p.style.transition = 'opacity .4s, transform .4s'; p.style.opacity = '1'; p.style.transform = ''; }, 20);
+    } else {
+      p.style.display = 'none';
+    }
+  });
+}
+
+function animateBars() {
+  const bars = document.querySelectorAll('.skill-fill');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const el = e.target;
+        el.style.width = el.dataset.w + '%';
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.3 });
+  bars.forEach(b => observer.observe(b));
+}
+
+window.addEventListener('load', animateBars);
+</script>
 </body>
 </html>
