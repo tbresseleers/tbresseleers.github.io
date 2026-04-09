@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thomas Bresseleers – Communications Portfolio</title>
+<style>
+  :root {
+    --blue: #1A3C6E;
+    --blue-light: #E8EEF7;
+    --blue-mid: #378ADD;
+    --accent: #0F6E56;
+    --text: #1a1a1a;
+    --muted: #555;
+    --border: #e0e0e0;
+    --bg: #f9f9f7;
+    --white: #fff;
+    --card-radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Georgia', serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+
+  /* NAV */
+  nav {
+    background: var(--blue);
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 60px;
+  }
+  .nav-logo { color: #fff; font-size: 1rem; font-family: 'Arial', sans-serif; font-weight: 700; letter-spacing: 0.5px; }
+  nav ul { list-style: none; display: flex; gap: 32px; }
+  nav ul a { color: #C8D8F0; text-decoration: none; font-family: 'Arial', sans-serif; font-size: 0.85rem; letter-spacing: 0.5px; transition: color 0.2s; }
+  nav ul a:hover { color: #fff; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, var(--blue) 0%, #0d2a52 100%);
+    color: white;
+    padding: 80px 5% 70px;
+    display: flex;
+    align-items: center;
+    gap: 60px;
+  }
+  .hero-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: var(--blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--blue);
+    font-family: 'Arial', sans-serif;
+    flex-shrink: 0;
+    border: 3px solid rgba(255,255,255,0.2);
+  }
+  .hero-text h1 { font-size: 2.4rem; font-family: 'Arial', sans-serif; font-weight: 700; margin-bottom: 8px; }
+  .hero-text h2 { font-size: 1.1rem; color: #C8D8F0; font-weight: 400; font-family: 'Arial', sans-serif; margin-bottom: 20px; }
+  .hero-text p { font-size: 1rem; color: rgba(255,255,255,0.85); max-width: 620px; line-height: 1.7; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+  .tag { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #C8D8F0; padding: 4px 14px; border-radius: 20px; font-size: 0.8rem; font-family: 'Arial', sans-serif; }
+
+  /* SECTIONS */
+  section { padding: 60px 5%; max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-family: 'Arial', sans-serif;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--blue);
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .section-title { font-size: 1.8rem; color: var(--text); margin-bottom: 32px; border-bottom: 2px solid var(--blue-light); padding-bottom: 12px; }
+
+  /* CARDS GRID */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+  .card {
+    background: var(--white);
+    border-radius: var(--card-radius);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(26,60,110,0.1); }
+  .card-thumb {
+    height: 160px;
+    background: var(--blue-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    position: relative;
+  }
+  .card-thumb.video { background: linear-gradient(135deg, #1a3c6e22, #1a3c6e44); }
+  .card-thumb.web { background: linear-gradient(135deg, #0F6E5622, #0F6E5644); }
+  .card-thumb.writing { background: linear-gradient(135deg, #37558822, #37558844); }
+  .card-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: var(--blue);
+    color: white;
+    font-size: 0.7rem;
+    font-family: 'Arial', sans-serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+  }
+  .card-badge.green { background: var(--accent); }
+  .card-badge.gray { background: #555; }
+  .card-body { padding: 20px; }
+  .card-body h3 { font-size: 1.05rem; font-family: 'Arial', sans-serif; font-weight: 700; margin-bottom: 6px; color: var(--text); }
+  .card-body p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+  .card-link {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 7px 18px;
+    border: 1.5px solid var(--blue);
+    color: var(--blue);
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-family: 'Arial', sans-serif;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .card-link:hover { background: var(--blue); color: white; }
+
+  /* SKILLS GRID */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .skill-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+  }
+  .skill-card h4 { font-family: 'Arial', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--blue); margin-bottom: 10px; }
+  .skill-list { list-style: none; font-size: 0.85rem; color: var(--muted); }
+  .skill-list li { padding: 3px 0; border-bottom: 1px solid #f0f0f0; }
+  .skill-list li:last-child { border-bottom: none; }
+  .skill-list li::before { content: "▸ "; color: var(--blue); }
+
+  /* EXPERIENCE TIMELINE */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 2px; background: var(--blue-light); }
+  .timeline-item { position: relative; margin-bottom: 36px; }
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -28px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--blue);
+    border: 2px solid white;
+    box-shadow: 0 0 0 2px var(--blue-light);
+  }
+  .timeline-item h3 { font-family: 'Arial', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); }
+  .timeline-item .org { color: var(--blue); font-size: 0.88rem; font-family: 'Arial', sans-serif; }
+  .timeline-item .dates { color: var(--muted); font-size: 0.82rem; font-family: 'Arial', sans-serif; margin-bottom: 6px; }
+  .timeline-item p { font-size: 0.88rem; color: var(--muted); }
+
+  /* CONTACT */
+  .contact-section {
+    background: var(--blue);
+    color: white;
+    padding: 60px 5%;
+    text-align: center;
+  }
+  .contact-section h2 { font-size: 1.8rem; margin-bottom: 12px; }
+  .contact-section p { color: #C8D8F0; margin-bottom: 28px; font-size: 1rem; }
+  .contact-links { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+  .contact-btn {
+    padding: 12px 28px;
+    border: 1.5px solid rgba(255,255,255,0.4);
+    color: white;
+    border-radius: 8px;
+    font-family: 'Arial', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .contact-btn:hover { background: rgba(255,255,255,0.1); }
+  .contact-btn.primary { background: white; color: var(--blue); border-color: white; }
+  .contact-btn.primary:hover { background: var(--blue-light); }
+
+  footer { background: #0d2a52; color: #8aadcc; text-align: center; padding: 20px; font-family: 'Arial', sans-serif; font-size: 0.8rem; }
+
+  @media (max-width: 600px) {
+    .hero { flex-direction: column; gap: 24px; padding: 40px 5%; }
+    .hero-text h1 { font-size: 1.6rem; }
+    nav ul { gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="nav-logo">Thomas Bresseleers</span>
+  <ul>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-avatar">TB</div>
+  <div class="hero-text">
+    <h1>Thomas Bresseleers</h1>
+    <h2>Communications & Project Management Professional · Banjul, The Gambia</h2>
+    <p>Bilingual (FR/EN) communications specialist with 3+ years of experience in international institutional communication. Currently Administrative & Communications Manager at MRC Unit The Gambia (LSHTM). Combining strategic communication, audiovisual production and multi-stakeholder coordination.</p>
+    <div class="hero-tags">
+      <span class="tag">Strategic Communication</span>
+      <span class="tag">Audiovisual Production</span>
+      <span class="tag">UNODC · MRC/LSHTM</span>
+      <span class="tag">M.Sc. KU Leuven</span>
+      <span class="tag">French · English</span>
+    </div>
+  </div>
+</div>
+
+<section id="work">
+  <div class="section-label">Portfolio</div>
+  <h2 class="section-title">Selected Work</h2>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-thumb video">
+        🎬
+        <span class="card-badge">Documentary</span>
+      </div>
+      <div class="card-body">
+        <h3>Gender-Based Violence Documentary – Action Aid</h3>
+        <p>Co-director and sound recordist. Documentary on gender-based sexual violence in rural Gambia, produced for Action Aid. Full production pipeline: development, shooting, editing.</p>
+        <a href="https://www.youtube.com/watch?v=i0cR9EuhOp4" target="_blank" class="card-link">Watch on YouTube →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-thumb video">
+        🎬
+        <span class="card-badge">Commercial</span>
+      </div>
+      <div class="card-body">
+        <h3>Kololi Beach Resort – Hotel Ad</h3>
+        <p>Co-director and sound recordist for a commercial advertisement for Kololi Beach Resort, The Gambia. Full post-production including sound design and colour grading.</p>
+        <a href="https://www.youtube.com/watch?v=NbCgR2BaSiI" target="_blank" class="card-link">Watch on YouTube →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-thumb video">
+        🎬
+        <span class="card-badge">Promo Film</span>
+      </div>
+      <div class="card-body">
+        <h3>Wide Open Walls – Graffiti Artist Promo</h3>
+        <p>Sound recordist and cameraman for a promotional film on the work of a graffiti artist. Image and sound capture, editing and post-production.</p>
+        <a href="https://www.youtube.com/watch?v=lWFuv9N-LbA" target="_blank" class="card-link">Watch on YouTube →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-thumb web">
+        🌐
+        <span class="card-badge green">Web & Strategy</span>
+      </div>
+      <div class="card-body">
+        <h3>HDRWA Platform – Communications Strategy</h3>
+        <p>Developed and implemented the full communications plan for the Health Data Research West Africa platform (MRC/LSHTM). Managed website (Drupal), social media, newsletters and stakeholder reporting.</p>
+        <a href="https://hdrwa.mrc.gm" target="_blank" class="card-link">Visit Platform →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-thumb writing">
+        ✍️
+        <span class="card-badge gray">Writing</span>
+      </div>
+      <div class="card-body">
+        <h3>UNODC West Africa – Press Releases & Reports</h3>
+        <p>Official communication materials, press releases, articles and newsletters for UNODC field office in Banjul and regional office in Dakar. Multilingual content (FR/EN).</p>
+        <a href="#contact" class="card-link">Request Samples →</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-thumb writing">
+        📋
+        <span class="card-badge gray">Events</span>
+      </div>
+      <div class="card-body">
+        <h3>International Workshop – Abidjan (UNODC)</h3>
+        <p>Full communication and logistics support for international workshop on "Strengthening Judicial Cooperation against Transnational Organised Crime" — banners, press release, badges, social media coverage.</p>
+        <a href="#contact" class="card-link">Request Samples →</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-label">Expertise</div>
+  <h2 class="section-title">Skills & Tools</h2>
+  <div class="skills-grid">
+    <div class="skill-card">
+      <h4>Communication & Writing</h4>
+      <ul class="skill-list">
+        <li>Strategic communication plans</li>
+        <li>Press releases & articles</li>
+        <li>Newsletters & donor reports</li>
+        <li>Social media management</li>
+        <li>Stakeholder engagement</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <h4>Audiovisual Production</h4>
+      <ul class="skill-list">
+        <li>Film direction & production</li>
+        <li>Video editing (Premiere Pro)</li>
+        <li>Sound recording & mixing</li>
+        <li>Photography (Lightroom)</li>
+        <li>Final Cut Pro · Pro Tools</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <h4>Digital & Web</h4>
+      <ul class="skill-list">
+        <li>Drupal CMS</li>
+        <li>Mailchimp</li>
+        <li>Canva</li>
+        <li>MS Office Suite</li>
+        <li>Social media analytics</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <h4>Project Coordination</h4>
+      <ul class="skill-list">
+        <li>Multi-stakeholder coordination</li>
+        <li>Event & workshop logistics</li>
+        <li>Reporting & documentation</li>
+        <li>Compliance & contracts</li>
+        <li>Capacity building support</li>
+      </ul>
+    </div>
+    <div class="skill-card">
+      <h4>Languages</h4>
+      <ul class="skill-list">
+        <li>French — Native</li>
+        <li>English — Fluent (C1/C2)</li>
+        <li>Spanish — Basic</li>
+        <li>Wolof — Basic</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="section-label">Background</div>
+  <h2 class="section-title">Experience & Education</h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <h3>Administrative & Communications Manager</h3>
+      <div class="org">MRC Unit The Gambia – London School of Hygiene & Tropical Medicine</div>
+      <div class="dates">February 2023 – Present · Banjul, The Gambia</div>
+      <p>Communications strategy for the HDRWA platform, website & social media management, stakeholder coordination, compliance with legal and contractual requirements.</p>
+    </div>
+    <div class="timeline-item">
+      <h3>International Consultant – Communications & Administration</h3>
+      <div class="org">UNODC – Office des Nations Unies contre la Drogue et le Crime</div>
+      <div class="dates">Nov 2022 – Dec 2022 · Banjul / Dakar</div>
+      <p>Official communication materials, multilingual content, partner coordination, workshop organisation across West Africa.</p>
+    </div>
+    <div class="timeline-item">
+      <h3>Communication Intern – Drug Control & Crime Prevention</h3>
+      <div class="org">UNODC – Office des Nations Unies contre la Drogue et le Crime</div>
+      <div class="dates">Nov 2021 – Jan 2022 · Banjul, The Gambia</div>
+      <p>Public information materials, newsletters, translation, international workshop support in Abidjan.</p>
+    </div>
+    <div class="timeline-item">
+      <h3>M.Sc. Communication Sciences – Digital Media & Society</h3>
+      <div class="org">KU Leuven</div>
+      <div class="dates">2019 – 2022 · Leuven, Belgium</div>
+      <p>Specialisation in digital media, communication strategy and society.</p>
+    </div>
+    <div class="timeline-item">
+      <h3>Bachelor – Image Techniques, Cinematography</h3>
+      <div class="org">INRACI – Haute École Libre de Bruxelles</div>
+      <div class="dates">2014 – 2019 · Brussels, Belgium</div>
+      <p>Full production training: development, pre-production, production, post-production.</p>
+    </div>
+  </div>
+</section>
+
+<div class="contact-section" id="contact">
+  <h2>Let's work together</h2>
+  <p>Available for communications, project coordination and audiovisual production roles in The Gambia and internationally.</p>
+  <div class="contact-links">
+    <a href="mailto:[VOTRE EMAIL]" class="contact-btn primary">📧 Send an email</a>
+    <a href="https://linkedin.com/in/[VOTRE PROFIL]" target="_blank" class="contact-btn">LinkedIn</a>
+    <a href="#work" class="contact-btn">View my work</a>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Thomas Bresseleers · Communications & Project Management · Banjul, The Gambia</p>
+</footer>
+
+</body>
+</html>
