@@ -1,668 +1,1272 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Thomas Bresseleers — Communications & Visual Storytelling</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+/* ═══════════════════════════════════════════════════════
+   DESIGN TOKENS — exact light palette of live site
+   Background: off-white/cream  |  Accent: emerald green
+   ═══════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
 :root{
-  --ink:#0d0d0d;
-  --ink2:#3a3a3a;
-  --ink3:#888;
-  --sand:#f5f0e8;
-  --sand2:#ece6d8;
-  --forest:#0d3d2e;
-  --forest2:#1a5c45;
-  --gold:#c8a84b;
-  --rust:#b84c2a;
-  --sky:#1a3c6e;
-  --sky2:#2a5298;
-  --white:#fff;
-  --radius:16px;
-}
-html{scroll-behavior:smooth}
-body{font-family:'DM Sans',sans-serif;background:var(--sand);color:var(--ink);overflow-x:hidden}
+  /* ── backgrounds (light, as on live site) ── */
+  --bg:         #f8f7f4;      /* page bg: warm off-white */
+  --bg-alt:     #f2f0ec;      /* alternating sections */
+  --surface:    #ffffff;      /* card/nav surface */
 
-/* ── NAV ── */
-nav{
-  position:sticky;top:0;z-index:999;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 6%;height:64px;
-  background:rgba(245,240,232,0.92);
-  backdrop-filter:blur(12px);
-  border-bottom:1px solid rgba(0,0,0,0.07);
-}
-.nav-name{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--forest)}
-.nav-links{display:flex;gap:28px;list-style:none}
-.nav-links a{font-size:0.82rem;font-weight:500;letter-spacing:0.5px;color:var(--ink2);text-decoration:none;text-transform:uppercase;transition:color .2s}
-.nav-links a:hover{color:var(--forest2)}
+  /* ── borders ── */
+  --border:     rgba(0,0,0,0.08);
+  --border-md:  rgba(0,0,0,0.14);
 
-/* ── HERO ── */
-.hero{
-  min-height:100vh;
-  display:grid;grid-template-columns:1fr 1fr;
-  padding:0 6%;
-  background:var(--forest);
-  position:relative;
-  overflow:hidden;
+  /* ── green accent — exactly as on live site ── */
+  --green:      #2a7a4f;      /* primary CTA, links */
+  --green-lt:   #34a866;      /* hover lighter */
+  --green-pale: #eaf4ee;      /* soft tint fills */
+  --green-dim:  rgba(42,122,79,0.10);
+
+  /* ── text ── */
+  --text:       #1a1a18;      /* near-black body text */
+  --text-2:     #4a4a44;      /* secondary text */
+  --muted:      #8a8a82;      /* captions, metadata */
+
+  /* ── shadows (light, clean) ── */
+  --sh:         0 1px 2px rgba(0,0,0,.05), 0 4px 12px rgba(0,0,0,.06);
+  --sh-hover:   0 4px 16px rgba(0,0,0,.10), 0 8px 28px rgba(0,0,0,.07);
+
+  --radius:     6px;
+  --radius-lg:  12px;
 }
-.hero-canvas{
-  position:absolute;inset:0;
+
+html { scroll-behavior:smooth }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ════════════════════════════════════════
+   CUSTOM CURSOR
+   ════════════════════════════════════════ */
+html { cursor: none }
+#cur  { position:fixed; width:7px; height:7px; background:var(--green); border-radius:50%;
+        pointer-events:none; z-index:10000; transform:translate(-50%,-50%);
+        transition:width .18s, height .18s, opacity .18s }
+#cur2 { position:fixed; width:30px; height:30px; border:1.5px solid rgba(42,122,79,.35);
+        border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%);
+        transition:width .28s, height .28s, border-color .28s }
+body.hov #cur2  { width:44px; height:44px; border-color:rgba(42,122,79,.55) }
+body.click #cur { width:4px; height:4px }
+@media(max-width:600px){ html{cursor:auto} #cur,#cur2{display:none} }
+
+/* ════════════════════════════════════════
+   NAV
+   ════════════════════════════════════════ */
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:200;
+  display: flex; justify-content:space-between; align-items:center;
+  padding: 1.4rem 5rem;
+  background: rgba(248,247,244,.97);
+  transition: background .35s, padding .3s, box-shadow .35s;
+  box-shadow: 0 1px 0 rgba(0,0,0,.06);
+}
+nav.scrolled {
+  background: rgba(248,247,244,.98);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 1px 0 var(--border), 0 2px 16px rgba(0,0,0,.05);
+  padding: .9rem 5rem;
+}
+.nav-brand {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem; letter-spacing: .04em;
+  color: var(--text); text-decoration: none;
+}
+.nav-links { display:flex; gap:2.2rem; list-style:none }
+.nav-links a {
+  color: var(--muted); text-decoration:none;
+  font-size: .75rem; letter-spacing:.1em; text-transform:uppercase; font-weight:500;
+  transition: color .2s; position:relative;
+}
+.nav-links a::after {
+  content:''; position:absolute; bottom:-3px; left:0; right:100%;
+  height:1px; background:var(--green);
+  transition: right .3s cubic-bezier(.4,0,.2,1);
+}
+.nav-links a:hover { color:var(--green) }
+.nav-links a:hover::after { right:0 }
+
+/* ════════════════════════════════════════
+   HERO — dark forest green, two-column layout
+   matching the reference screenshot exactly
+   ════════════════════════════════════════ */
+
+/* Gold accent for hero only */
+:root {
+  --gold: #c9a84c;
+  --gold-lt: #dfc070;
+  --hero-bg: #1c4a30;        /* dark forest green */
+  --hero-bg-deep: #163a25;   /* slightly deeper for depth */
+  --hero-card: rgba(255,255,255,0.07);   /* frosted stat card */
+  --hero-card-hover: rgba(255,255,255,0.11);
+  --hero-border: rgba(255,255,255,0.10);
+}
+
+/* Nav stays cream/light — but when over hero it looks transparent
+   The hero itself is the dark panel */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 7rem 5rem 5rem;
+  position: relative;
+  overflow: hidden;
+  background: var(--hero-bg);
+}
+
+/* subtle radial depth */
+.hero::before {
+  content:'';
+  position:absolute; inset:0; pointer-events:none;
   background:
-    radial-gradient(ellipse 60% 80% at 80% 50%, rgba(26,92,69,0.6) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(200,168,75,0.1) 0%, transparent 60%);
+    radial-gradient(ellipse 60% 70% at 110% 50%, rgba(255,255,255,.04) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at -10% 50%, rgba(0,0,0,.25) 0%, transparent 55%);
 }
-.hero-left{
-  display:flex;flex-direction:column;justify-content:center;
-  padding:80px 0;position:relative;z-index:2;
+
+/* subtle dot-texture overlay */
+.hero-bg {
+  position:absolute; inset:0; pointer-events:none;
+  background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: .45;
 }
-.hero-eyebrow{
-  font-size:0.72rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;
-  color:var(--gold);margin-bottom:24px;
-  display:flex;align-items:center;gap:12px;
+
+.hero-line { display:none } /* not needed in this layout */
+
+/* ── LEFT COLUMN ── */
+.hero-left {
+  position: relative; z-index:1;
+  display: flex; flex-direction: column;
+  padding-right: 4rem;
 }
-.hero-eyebrow::before{content:'';width:32px;height:1px;background:var(--gold)}
-.hero-h1{
+
+.hero-label {
+  display:flex; align-items:center; gap:.8rem; margin-bottom:2rem;
+  opacity:0; transform:translateY(14px);
+  transition: opacity .7s .1s, transform .7s .1s cubic-bezier(.16,1,.3,1);
+}
+.hero-label.in { opacity:1; transform:translateY(0) }
+.hero-label::before { content:''; display:block; width:28px; height:1px; background:var(--gold) }
+.hero-label span {
+  font-size:.65rem; letter-spacing:.24em; text-transform:uppercase;
+  color:var(--gold); font-weight:600;
+}
+
+.hero-h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 5.5vw, 6.2rem);
+  line-height: 1.06; font-weight: 600; letter-spacing:-.02em;
+  margin-bottom: 1.8rem;
+  color: #ffffff;
+}
+.hero-h1 em { font-style:italic; color:var(--gold) }
+
+/* word-by-word entrance */
+.hw   { display:inline-block; overflow:hidden }
+.hw-i { display:block; transform:translateY(110%); transition:transform .82s cubic-bezier(.16,1,.3,1) }
+.hw-i.in { transform:translateY(0) }
+
+.hero-sub {
+  font-size: 1rem; color: rgba(255,255,255,.7);
+  max-width: 460px; margin-bottom: 2.5rem; line-height:1.8;
+  opacity:0; transform:translateY(14px);
+  transition: opacity .75s .55s, transform .75s .55s cubic-bezier(.16,1,.3,1);
+}
+.hero-sub.in { opacity:1; transform:translateY(0) }
+
+.hero-ctas {
+  display:flex; gap:.8rem; flex-wrap:wrap;
+  opacity:0; transform:translateY(14px);
+  transition: opacity .75s .72s, transform .75s .72s cubic-bezier(.16,1,.3,1);
+}
+.hero-ctas.in { opacity:1; transform:translateY(0) }
+
+.btn {
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:.78rem 1.9rem; border-radius:100px;
+  font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
+  font-weight:600; text-decoration:none; cursor:none;
+  transition: transform .22s, background .22s, box-shadow .22s, border-color .22s, color .22s;
+}
+.btn-primary {
+  background: var(--gold); color: #1c3a25;
+  box-shadow: 0 2px 12px rgba(201,168,76,.35);
+}
+.btn-primary:hover { background:var(--gold-lt); transform:scale(1.03); box-shadow:0 4px 20px rgba(201,168,76,.45) }
+.btn-outline {
+  border:1.5px solid rgba(255,255,255,.3); color: rgba(255,255,255,.85);
+}
+.btn-outline:hover { border-color:var(--gold); color:var(--gold); transform:scale(1.03) }
+
+/* ── RIGHT COLUMN: STAT CARDS ── */
+.hero-stats {
+  position: relative; z-index:1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  gap: 14px;
+  opacity:0; transform:translateY(14px);
+  transition: opacity .75s .9s, transform .75s .9s cubic-bezier(.16,1,.3,1);
+}
+.hero-stats.in { opacity:1; transform:translateY(0) }
+
+/* First stat spans full width */
+.hero-stats > div:first-child {
+  grid-column: 1 / -1;
+}
+
+.hs-card {
+  background: var(--hero-card);
+  border: 1px solid var(--hero-border);
+  border-radius: 16px;
+  padding: 1.6rem 1.8rem;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background .25s, transform .25s;
+}
+.hs-card:hover { background: var(--hero-card-hover); transform:translateY(-2px) }
+
+.hs-num {
   font-family:'Playfair Display',serif;
-  font-size:clamp(2.8rem,5vw,4.5rem);
-  line-height:1.1;color:#fff;
-  margin-bottom:28px;
+  font-size: 2.6rem; font-weight:600; line-height:1;
+  color: var(--gold); margin-bottom:.4rem;
 }
-.hero-h1 em{font-style:italic;color:var(--gold)}
-.hero-sub{
-  font-size:1rem;font-weight:300;line-height:1.8;
-  color:rgba(255,255,255,0.7);max-width:460px;
-  margin-bottom:40px;
-}
-.hero-cta{display:flex;gap:16px;flex-wrap:wrap}
-.btn{
-  padding:13px 28px;border-radius:40px;font-size:0.85rem;font-weight:500;
-  text-decoration:none;letter-spacing:0.3px;transition:all .25s;cursor:pointer;border:none;
-}
-.btn-primary{background:var(--gold);color:#1a0e00}
-.btn-primary:hover{background:#d4b05a;transform:translateY(-2px)}
-.btn-outline{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,0.35)}
-.btn-outline:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.6)}
+.hs-label { font-size:.8rem; color: rgba(255,255,255,.75); margin-bottom:.2rem; font-weight:400 }
+.hs-sub   { font-size:.72rem; color: rgba(255,255,255,.4) }
 
-.hero-right{
-  display:flex;align-items:center;justify-content:center;
-  position:relative;z-index:2;padding:60px 0;
-}
-.hero-stats{display:flex;flex-direction:column;gap:20px;width:100%;max-width:360px}
-.stat-card{
-  background:rgba(255,255,255,0.07);
-  border:1px solid rgba(255,255,255,0.12);
-  border-radius:var(--radius);
-  padding:24px 28px;
-  transition:background .3s;
-}
-.stat-card:hover{background:rgba(255,255,255,0.12)}
-.stat-num{font-family:'Playfair Display',serif;font-size:2.4rem;color:var(--gold);line-height:1}
-.stat-label{font-size:0.82rem;color:rgba(255,255,255,0.55);margin-top:6px;font-weight:300}
-.stat-sub{font-size:0.78rem;color:rgba(255,255,255,0.35);margin-top:3px}
+/* ════════════════════════════════════════
+   SCROLL REVEAL
+   ════════════════════════════════════════ */
+.rv { opacity:0; transform:translateY(28px); transition:opacity .85s cubic-bezier(.16,1,.3,1), transform .85s cubic-bezier(.16,1,.3,1) }
+.rv.in { opacity:1; transform:translateY(0) }
+.d1{transition-delay:.07s} .d2{transition-delay:.14s} .d3{transition-delay:.21s} .d4{transition-delay:.28s}
 
-/* ── SECTION WRAP ── */
-.section{padding:90px 6%}
-.section-alt{background:var(--sand2)}
-.label{
-  display:inline-flex;align-items:center;gap:10px;
-  font-size:0.7rem;font-weight:500;letter-spacing:3px;text-transform:uppercase;
-  color:var(--forest2);margin-bottom:16px;
-}
-.label::after{content:'';flex:1;height:1px;background:var(--forest2);opacity:0.3;min-width:40px}
-.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3rem);color:var(--ink);margin-bottom:12px;line-height:1.15}
-.section-intro{font-size:1rem;font-weight:300;color:var(--ink2);line-height:1.8;max-width:600px;margin-bottom:56px}
+/* ════════════════════════════════════════
+   SECTION CHROME
+   ════════════════════════════════════════ */
+section { padding:6rem 5rem; position:relative }
+section.bg-alt { background:var(--bg-alt) }
+section.bg-white { background:var(--surface) }
 
-/* ── WORK FILTER ── */
-.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:40px}
-.filter-btn{
-  padding:8px 20px;border-radius:40px;border:1.5px solid rgba(0,0,0,0.15);
-  font-size:0.8rem;font-weight:500;background:transparent;color:var(--ink2);
-  cursor:pointer;transition:all .2s;
+.sec-eyebrow { display:flex; align-items:center; gap:.7rem; margin-bottom:.65rem }
+.sec-eyebrow::before { content:''; width:18px; height:1.5px; background:var(--green); flex-shrink:0 }
+.sec-eyebrow span { font-size:.65rem; letter-spacing:.22em; text-transform:uppercase; color:var(--green); font-weight:600 }
+.sec-title {
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2rem,3.6vw,3.2rem); font-weight:600; line-height:1.15;
+  margin-bottom:.9rem; color:var(--text);
 }
-.filter-btn.active,.filter-btn:hover{background:var(--forest);color:#fff;border-color:var(--forest)}
+.sec-desc { color:var(--text-2); max-width:520px; font-size:.9rem; line-height:1.85 }
+.sec-header { margin-bottom:3rem }
 
-/* ── PROJECT GRID ── */
-.projects{display:grid;grid-template-columns:repeat(12,1fr);gap:20px}
-.proj{
-  border-radius:var(--radius);overflow:hidden;
-  cursor:pointer;transition:transform .3s;position:relative;
+/* ════════════════════════════════════════
+   FILTER PILLS
+   ════════════════════════════════════════ */
+.filters { display:flex; gap:.4rem; flex-wrap:wrap; margin-bottom:2.5rem }
+.filter-btn {
+  padding:.4rem 1.1rem; border-radius:100px;
+  border:1.5px solid var(--border-md); background:transparent;
+  color:var(--muted); font-size:.7rem; letter-spacing:.08em; text-transform:uppercase;
+  font-family:'Inter',sans-serif; font-weight:500; cursor:none;
+  transition: all .22s;
 }
-.proj:hover{transform:translateY(-6px)}
-.proj-col-8{grid-column:span 8}
-.proj-col-4{grid-column:span 4}
-.proj-col-6{grid-column:span 6}
-.proj-thumb{
-  height:320px;display:flex;align-items:flex-end;padding:28px;
-  position:relative;overflow:hidden;
-}
-.proj-col-4 .proj-thumb{height:320px}
-.proj-thumb-bg{
-  position:absolute;inset:0;background-size:cover;background-position:center;
-  transition:transform .5s;
-}
-.proj:hover .proj-thumb-bg{transform:scale(1.04)}
-.proj-thumb-overlay{
-  position:absolute;inset:0;
-  background:linear-gradient(to top, rgba(5,20,15,0.92) 0%, rgba(5,20,15,0.2) 60%, transparent 100%);
-}
-.proj-type{
-  position:absolute;top:20px;left:20px;
-  background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);
-  border:1px solid rgba(255,255,255,0.2);
-  color:#fff;font-size:0.68rem;font-weight:500;letter-spacing:1.5px;
-  text-transform:uppercase;padding:5px 14px;border-radius:30px;
-}
-.proj-info{position:relative;z-index:1}
-.proj-title{font-family:'Playfair Display',serif;font-size:1.3rem;color:#fff;margin-bottom:6px;line-height:1.3}
-.proj-desc{font-size:0.82rem;font-weight:300;color:rgba(255,255,255,0.65);line-height:1.5}
-.proj-link{
-  display:inline-flex;align-items:center;gap:6px;
-  margin-top:14px;color:var(--gold);font-size:0.8rem;font-weight:500;
-  text-decoration:none;transition:gap .2s;
-}
-.proj-link:hover{gap:10px}
+.filter-btn.active, .filter-btn:hover { border-color:var(--green); color:var(--green); background:var(--green-dim) }
 
-/* ── SKILLS ── */
-.skills-layout{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
-.skill-group{margin-bottom:32px}
-.skill-group-title{font-size:0.75rem;font-weight:500;letter-spacing:2px;text-transform:uppercase;color:var(--ink3);margin-bottom:16px}
-.skill-item{margin-bottom:14px}
-.skill-name-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-.skill-name{font-size:0.9rem;font-weight:400;color:var(--ink2)}
-.skill-pct{font-size:0.78rem;font-weight:500;color:var(--forest2)}
-.skill-bar{height:4px;background:rgba(0,0,0,0.08);border-radius:4px;overflow:hidden}
-.skill-fill{
-  height:100%;background:var(--forest2);border-radius:4px;
-  width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1);
-}
-.skills-right{padding:40px;background:var(--forest);border-radius:var(--radius);color:#fff}
-.skills-right h3{font-family:'Playfair Display',serif;font-size:1.6rem;color:#fff;margin-bottom:8px}
-.skills-right p{font-size:0.9rem;font-weight:300;color:rgba(255,255,255,0.65);line-height:1.7;margin-bottom:28px}
-.tools-grid{display:flex;flex-wrap:wrap;gap:10px}
-.tool-pill{
-  padding:6px 16px;background:rgba(255,255,255,0.1);
-  border:1px solid rgba(255,255,255,0.15);
-  border-radius:30px;font-size:0.78rem;color:rgba(255,255,255,0.8);
+/* ════════════════════════════════════════
+   SELECTED WORK — original card grid layout
+   (3-col below filters, same as live site)
+   ════════════════════════════════════════ */
+.work-grid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;
 }
 
-/* ── TIMELINE ── */
-.timeline{position:relative;padding-left:0}
-.tl-item{
-  display:grid;grid-template-columns:160px 1fr;
-  gap:0 32px;margin-bottom:0;
-  position:relative;
+.work-card {
+  background:var(--surface); border-radius:var(--radius-lg);
+  overflow:hidden; position:relative; cursor:none;
+  box-shadow:var(--sh);
+  transition:box-shadow .3s, transform .3s;
 }
-.tl-item::after{
-  content:'';position:absolute;
-  left:159px;top:8px;bottom:-40px;
-  width:1px;background:rgba(0,0,0,0.1);
-}
-.tl-item:last-child::after{display:none}
-.tl-dates{
-  text-align:right;padding-top:2px;padding-bottom:40px;
-}
-.tl-dates span{font-size:0.78rem;font-weight:500;color:var(--forest2)}
-.tl-dates small{display:block;font-size:0.72rem;color:var(--ink3);margin-top:2px}
-.tl-body{
-  padding-bottom:40px;padding-left:32px;border-left:none;
-  position:relative;
-}
-.tl-body::before{
-  content:'';position:absolute;
-  left:-5px;top:7px;
-  width:10px;height:10px;border-radius:50%;
-  background:var(--forest2);
-  border:2px solid var(--sand2);
-}
-.tl-role{font-size:1rem;font-weight:500;color:var(--ink);margin-bottom:3px}
-.tl-org{font-size:0.85rem;color:var(--forest2);font-weight:400;margin-bottom:8px}
-.tl-desc{font-size:0.85rem;font-weight:300;color:var(--ink2);line-height:1.7}
+.work-card:hover { box-shadow:var(--sh-hover); transform:translateY(-3px) }
 
-/* ── CONTACT ── */
-.contact-wrap{
-  background:var(--forest);
-  border-radius:var(--radius);
-  padding:64px;
-  display:grid;grid-template-columns:1fr 1fr;gap:60px;
-  align-items:center;
+/* ── VIDEO THUMBNAIL (replaces iframes) ── */
+.vid-thumb {
+  position:relative; overflow:hidden; cursor:none;
+  aspect-ratio:16/9;
+  background:#111;
 }
-.contact-left h2{font-family:'Playfair Display',serif;font-size:2.4rem;color:#fff;margin-bottom:16px;line-height:1.2}
-.contact-left p{font-size:0.95rem;font-weight:300;color:rgba(255,255,255,0.65);line-height:1.8}
-.contact-links{display:flex;flex-direction:column;gap:16px}
-.contact-item{
-  display:flex;align-items:center;gap:16px;
-  padding:18px 24px;
-  background:rgba(255,255,255,0.07);
-  border:1px solid rgba(255,255,255,0.1);
-  border-radius:12px;
-  text-decoration:none;color:#fff;
+.vid-thumb img {
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition: transform .55s cubic-bezier(.16,1,.3,1), opacity .3s;
+}
+.work-card:hover .vid-thumb img { transform:scale(1.04); opacity:.88 }
+
+/* play button overlay */
+.play-overlay {
+  position:absolute; inset:0;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(10,15,10,.18);
+  transition:background .25s;
+}
+.work-card:hover .play-overlay { background:rgba(10,15,10,.38) }
+.play-circle {
+  width:52px; height:52px; border-radius:50%;
+  background:rgba(255,255,255,.92);
+  display:flex; align-items:center; justify-content:center;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  transition: transform .25s, background .25s;
+}
+.work-card:hover .play-circle { transform:scale(1.12); background:#fff }
+.play-triangle {
+  width:0; height:0;
+  border-top:9px solid transparent; border-bottom:9px solid transparent;
+  border-left:16px solid var(--green); margin-left:3px;
+}
+
+/* hover meta overlay on vid cards */
+.vid-hover-meta {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:1rem 1.2rem .8rem;
+  background:linear-gradient(transparent, rgba(10,14,10,.9) 50%);
+  opacity:0; transform:translateY(6px);
+  transition:opacity .3s, transform .3s;
+  pointer-events:none;
+}
+.work-card:hover .vid-hover-meta { opacity:1; transform:translateY(0) }
+.vhm-tag  { font-size:.6rem; letter-spacing:.16em; text-transform:uppercase; color:rgba(100,220,140,.9); font-weight:600; margin-bottom:.2rem }
+.vhm-title{ font-family:'Playfair Display',serif; font-size:1rem; color:#f2f0ec; line-height:1.25 }
+
+/* ── NON-VIDEO card (platforms, comms) ── */
+.card-thumb-plain {
+  aspect-ratio:16/9;
+  background:var(--green-pale);
+  display:flex; align-items:center; justify-content:center;
+  overflow:hidden; position:relative;
+  transition:background .25s;
+}
+.work-card:hover .card-thumb-plain { background:#daf0e4 }
+.card-icon { color:var(--green); opacity:.25; transition:opacity .3s, transform .3s }
+.work-card:hover .card-icon { opacity:.45; transform:scale(1.08) }
+
+.card-body { padding:1.3rem 1.5rem 1.6rem }
+.card-tag   { font-size:.62rem; letter-spacing:.16em; text-transform:uppercase; color:var(--green); font-weight:600; margin-bottom:.4rem }
+.card-title { font-family:'Playfair Display',serif; font-size:1.08rem; font-weight:600; margin-bottom:.4rem; line-height:1.3; color:var(--text) }
+.card-desc  { font-size:.82rem; color:var(--text-2); line-height:1.65 }
+.card-link  {
+  display:inline-flex; align-items:center; gap:.35rem;
+  margin-top:.75rem; font-size:.7rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--green); text-decoration:none; font-weight:600;
+  transition:gap .22s;
+}
+.card-link:hover { gap:.55rem }
+.card-link svg { transition:transform .22s }
+.card-link:hover svg { transform:translateX(3px) }
+
+/* ── VIDEO MODAL ── */
+.modal-wrap {
+  display:none; position:fixed; inset:0; z-index:800;
+  background:rgba(10,14,10,.82); backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+  align-items:center; justify-content:center;
+  opacity:0; transition:opacity .3s;
+}
+.modal-wrap.open { display:flex; opacity:1 }
+.modal-inner {
+  position:relative; width:min(880px,92vw);
+  background:#0e1410; border-radius:var(--radius-lg); overflow:hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,.55);
+  transform:scale(.94); transition:transform .32s cubic-bezier(.16,1,.3,1);
+}
+.modal-wrap.open .modal-inner { transform:scale(1) }
+.modal-video { position:relative; padding-bottom:56.25%; height:0 }
+.modal-video iframe { position:absolute; inset:0; width:100%; height:100%; border:none }
+.modal-meta { padding:1rem 1.4rem 1.3rem; background:#121a14 }
+.modal-tag  { font-size:.6rem; letter-spacing:.16em; text-transform:uppercase; color:#4ade9a; font-weight:600; margin-bottom:.25rem }
+.modal-title{ font-family:'Playfair Display',serif; font-size:1.2rem; color:#e8f0e8 }
+.modal-close {
+  position:absolute; top:.85rem; right:.85rem; z-index:10;
+  width:30px; height:30px; border-radius:50%; border:none; cursor:none;
+  background:rgba(255,255,255,.12); color:#fff; font-size:1rem;
+  display:flex; align-items:center; justify-content:center;
   transition:background .2s;
 }
-.contact-item:hover{background:rgba(255,255,255,0.13)}
-.contact-icon{width:40px;height:40px;border-radius:10px;background:rgba(200,168,75,0.2);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.contact-item-text strong{display:block;font-size:0.88rem;font-weight:500}
-.contact-item-text span{font-size:0.78rem;color:rgba(255,255,255,0.5)}
+.modal-close:hover { background:rgba(255,255,255,.24) }
 
-footer{text-align:center;padding:32px;background:var(--forest);border-top:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.3);font-size:0.78rem}
+/* ════════════════════════════════════════
+   VISUAL WORK — new section, same aesthetic
+   ════════════════════════════════════════ */
+.gallery-grid {
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-auto-rows:200px;
+  gap:10px;
+}
+.gi {
+  border-radius:var(--radius-lg); overflow:hidden; position:relative;
+  background:var(--green-pale); cursor:none;
+  box-shadow:var(--sh);
+  transition:box-shadow .3s, transform .3s;
+}
+.gi:hover { box-shadow:var(--sh-hover); transform:translateY(-2px) }
+.gi img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .55s cubic-bezier(.16,1,.3,1) }
+.gi:hover img { transform:scale(1.05) }
+.gi-placeholder {
+  width:100%; height:100%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:.6rem; color:var(--green); font-size:.65rem; letter-spacing:.1em; text-transform:uppercase;
+  transition:background .25s;
+}
+.gi:hover .gi-placeholder { background:#d8edd9 }
+.gi-placeholder svg { opacity:.3; transition:opacity .25s }
+.gi:hover .gi-placeholder svg { opacity:.55 }
 
+/* caption slides up on hover */
+.gi-caption {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:.75rem 1rem;
+  background:linear-gradient(transparent, rgba(10,18,10,.82));
+  font-size:.72rem; color:#f2f0ec; letter-spacing:.04em;
+  transform:translateY(100%); transition:transform .3s cubic-bezier(.16,1,.3,1);
+}
+.gi:hover .gi-caption { transform:translateY(0) }
+
+/* category badge */
+.gi-badge {
+  position:absolute; top:.65rem; left:.65rem;
+  padding:.2rem .7rem; border-radius:100px;
+  font-size:.58rem; letter-spacing:.1em; text-transform:uppercase;
+  background:rgba(248,247,244,.92); color:var(--green);
+  border:1px solid rgba(42,122,79,.2); font-weight:600;
+}
+
+/* gallery grid spans */
+.gw5{grid-column:span 5} .gw4{grid-column:span 4} .gw3{grid-column:span 3}
+.gw7{grid-column:span 7} .gw6{grid-column:span 6} .gh2{grid-row:span 2}
+
+/* ── LIGHTBOX ── */
+.lightbox {
+  display:none; position:fixed; inset:0; z-index:900;
+  background:rgba(10,14,10,.94); backdrop-filter:blur(22px);
+  align-items:center; justify-content:center;
+  opacity:0; transition:opacity .32s;
+}
+.lightbox.open { display:flex; opacity:1 }
+.lb-inner {
+  position:relative; display:flex; flex-direction:column; align-items:center;
+  transform:scale(.93); transition:transform .34s cubic-bezier(.16,1,.3,1);
+}
+.lightbox.open .lb-inner { transform:scale(1) }
+.lightbox img { max-width:88vw; max-height:78vh; object-fit:contain; border-radius:var(--radius) }
+.lb-meta { text-align:center; margin-top:.9rem }
+.lb-cat { font-size:.6rem; letter-spacing:.16em; text-transform:uppercase; color:#4ade9a; font-weight:600; margin-bottom:.25rem }
+.lb-cap { font-size:.8rem; color:rgba(200,215,205,.7) }
+.lb-close {
+  position:absolute; top:-1rem; right:-1rem;
+  width:32px; height:32px; border-radius:50%; cursor:none;
+  background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.15);
+  color:rgba(255,255,255,.65); font-size:1rem;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .2s, color .2s;
+}
+.lb-close:hover { background:rgba(255,255,255,.2); color:#fff }
+
+/* ════════════════════════════════════════
+   MEASURABLE IMPACT — KPIs only, light-adapted
+   ════════════════════════════════════════ */
+.impact-grid {
+  display:grid; grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--border); background:var(--border);
+  gap:1px;
+}
+.impact-stat {
+  padding:2.5rem 2rem; background:var(--surface);
+  transition:background .25s;
+}
+.impact-stat:hover { background:var(--green-pale) }
+.impact-num {
+  font-family:'Playfair Display',serif;
+  font-size:3.8rem; font-weight:600; line-height:1;
+  color:var(--green); margin-bottom:.5rem;
+}
+.impact-label { font-size:.68rem; letter-spacing:.16em; text-transform:uppercase; color:var(--text-2); font-weight:600; margin-bottom:.35rem }
+.impact-desc  { font-size:.82rem; color:var(--muted); line-height:1.6 }
+
+/* ════════════════════════════════════════
+   SKILLS  (identical to live site)
+   ════════════════════════════════════════ */
+.skills-layout { display:grid; grid-template-columns:1fr 1fr; gap:4rem }
+.skills-group-title { font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; color:var(--green); font-weight:600; margin-bottom:1.5rem }
+.skill-row { margin-bottom:1.25rem }
+.skill-top  { display:flex; justify-content:space-between; margin-bottom:.4rem }
+.skill-name { font-size:.88rem; color:var(--text); font-weight:500 }
+.skill-pct  { font-size:.8rem; color:var(--muted) }
+.skill-track{ height:3px; background:var(--border); border-radius:3px; overflow:hidden }
+.skill-fill {
+  height:100%; background:var(--green); border-radius:3px;
+  width:0; transition:width 1.2s cubic-bezier(.16,1,.3,1);
+}
+.tools-list { display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.5rem }
+.tool-chip {
+  padding:.3rem .85rem; border-radius:100px;
+  border:1.5px solid var(--border-md); font-size:.72rem; color:var(--text-2);
+  background:var(--surface); transition:all .22s;
+}
+.tool-chip:hover { border-color:var(--green); color:var(--green); background:var(--green-dim) }
+.lang-row { display:flex; justify-content:space-between; align-items:center; padding:.85rem 0; border-bottom:1px solid var(--border) }
+.lang-name  { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--text) }
+.lang-level { font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); font-weight:500 }
+
+/* ════════════════════════════════════════
+   JOURNEY  (identical to live site)
+   ════════════════════════════════════════ */
+.timeline { padding-left:2rem; position:relative }
+.timeline::before { content:''; position:absolute; left:0; top:.4rem; bottom:0; width:1.5px; background:var(--border) }
+.timeline-item { position:relative; margin-bottom:3rem }
+.t-dot {
+  position:absolute; left:-2.35rem; top:.45rem;
+  width:8px; height:8px; border-radius:50%;
+  background:var(--green); box-shadow:0 0 0 4px var(--bg), 0 0 0 6px rgba(42,122,79,.15);
+  transition:box-shadow .25s;
+}
+.timeline-item:hover .t-dot { box-shadow:0 0 0 4px var(--bg), 0 0 0 8px rgba(42,122,79,.25) }
+.t-period { font-size:.68rem; letter-spacing:.14em; text-transform:uppercase; color:var(--green); font-weight:600; margin-bottom:.35rem }
+.t-role   { font-family:'Playfair Display',serif; font-size:1.15rem; font-weight:600; margin-bottom:.2rem; color:var(--text) }
+.t-org    { font-size:.84rem; color:var(--muted); margin-bottom:.6rem; font-weight:500 }
+.t-desc   { font-size:.85rem; color:var(--text-2); line-height:1.78; max-width:560px }
+
+/* ════════════════════════════════════════
+   CONTACT  (identical to live site)
+   ════════════════════════════════════════ */
+#contact { display:grid; grid-template-columns:1fr 1fr; gap:5rem; align-items:center; min-height:65vh }
+.contact-big { font-family:'Playfair Display',serif; font-size:clamp(2.6rem,4.5vw,4.5rem); font-weight:600; line-height:1.1; margin-bottom:1.2rem; color:var(--text) }
+.contact-big em { color:var(--green); font-style:italic }
+.contact-sub { color:var(--text-2); font-size:.9rem; line-height:1.85; max-width:400px }
+.contact-cards { display:flex; flex-direction:column; gap:12px }
+.contact-card {
+  display:flex; align-items:center; gap:1.2rem;
+  padding:1.4rem 1.6rem; background:var(--surface);
+  border:1.5px solid var(--border); border-radius:var(--radius-lg);
+  text-decoration:none; color:var(--text);
+  box-shadow:var(--sh); transition:box-shadow .25s, border-color .25s, transform .25s;
+}
+.contact-card:hover { box-shadow:var(--sh-hover); border-color:rgba(42,122,79,.3); transform:translateY(-2px) }
+.cc-icon { width:42px; height:42px; border-radius:50%; background:var(--green-pale); display:flex; align-items:center; justify-content:center; font-size:1rem; flex-shrink:0; transition:background .22s }
+.contact-card:hover .cc-icon { background:#cee9d6 }
+.cc-label { font-size:.62rem; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; margin-bottom:.18rem }
+.cc-val   { font-size:.9rem; color:var(--text-2); font-weight:500 }
+
+/* ── FOOTER ── */
+footer {
+  border-top:1px solid var(--border); padding:1.6rem 5rem;
+  display:flex; justify-content:space-between; align-items:center;
+  background:var(--surface); font-size:.72rem; color:var(--muted); letter-spacing:.05em;
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE
+   ════════════════════════════════════════ */
+@media(max-width:1100px){
+  .impact-grid{ grid-template-columns:repeat(2,1fr) }
+}
 @media(max-width:900px){
-  .hero{grid-template-columns:1fr;padding-top:40px}
-  .hero-right{padding:0 0 60px}
-  .hero-stats{flex-direction:row;flex-wrap:wrap}
-  .stat-card{flex:1;min-width:140px}
-  .proj-col-8,.proj-col-4,.proj-col-6{grid-column:span 12}
-  .skills-layout{grid-template-columns:1fr}
-  .contact-wrap{grid-template-columns:1fr;padding:40px 28px}
-  .tl-item{grid-template-columns:1fr}
-  .tl-item::after{display:none}
-  .tl-dates{text-align:left;padding-bottom:4px}
+  nav,nav.scrolled{ padding:1rem 1.5rem }
+  .nav-links{ display:none }
+  section{ padding:4.5rem 1.5rem }
+  /* hero collapses to single column on mobile */
+  .hero{ grid-template-columns:1fr; padding:6rem 1.5rem 3rem; gap:3rem; align-items:start }
+  .hero-left{ padding-right:0 }
+  .hero-stats{ grid-template-columns:1fr 1fr }
+  .hero-stats > div:first-child,
+  .hero-stats > div:last-child { grid-column: 1 / -1 }
+  .work-grid{ grid-template-columns:1fr }
+  .skills-layout{ grid-template-columns:1fr; gap:2.5rem }
+  #contact{ grid-template-columns:1fr; gap:3rem; min-height:auto }
+  footer{ flex-direction:column; gap:.4rem; text-align:center; padding:1.4rem }
+  .gallery-grid{ grid-template-columns:repeat(6,1fr) }
+  .gw5,.gw4,.gw3{ grid-column:span 3 }
+  .gw7,.gw6{ grid-column:span 6 }
 }
 @media(max-width:600px){
-  .nav-links{gap:14px}
-  .hero-h1{font-size:2.4rem}
-  .section{padding:60px 5%}
-  .projects{gap:12px}
+  .gallery-grid{ grid-template-columns:1fr 1fr; grid-auto-rows:150px }
+  .gw5,.gw4,.gw3,.gw7,.gw6{ grid-column:span 2 }
+  .impact-grid{ grid-template-columns:1fr 1fr }
+  .work-grid{ grid-template-columns:1fr }
 }
 </style>
 </head>
 <body>
 
-<nav>
-  <span class="nav-name">Thomas Bresseleers</span>
+<div id="cur"></div>
+<div id="cur2"></div>
+
+<!-- ══════════ NAV ══════════ -->
+<nav id="nav">
+  <a href="#" class="nav-brand">Thomas Bresseleers</a>
   <ul class="nav-links">
     <li><a href="#work">Work</a></li>
+    <li><a href="#visual">Gallery</a></li>
+    <li><a href="#impact">Impact</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#journey">Journey</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-canvas"></div>
+<!-- ══════════ HERO ══════════
+     Two-column: left = eyebrow + heading + sub + CTAs
+                 right = stat cards (matching reference screenshot)
+     ══════════════════════════════════════════════════ -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+
+  <!-- LEFT: heading & CTAs -->
   <div class="hero-left">
-    <div class="hero-eyebrow">Communications · Storytelling · Impact</div>
-    <h1 class="hero-h1">
-      Words, images<br>& <em>impact</em> — from<br>Banjul to the world.
+    <div class="hero-label" id="hLabel">
+      <span>Communications · Storytelling · Impact</span>
+    </div>
+
+    <h1 class="hero-h1" aria-label="Words, images & impact — from Banjul to the world.">
+      <span class="hw"><span class="hw-i">Words,&nbsp;</span></span>
+      <span class="hw"><span class="hw-i">images&nbsp;</span></span>
+      <span class="hw"><span class="hw-i">&amp;&nbsp;<em>impact&nbsp;</em></span></span>—<br>
+      <span class="hw"><span class="hw-i">from&nbsp;Banjul&nbsp;</span></span>
+      <span class="hw"><span class="hw-i">to&nbsp;the&nbsp;</span></span>
+      <span class="hw"><span class="hw-i">world.</span></span>
     </h1>
-    <p class="hero-sub">
-      Bilingual communications professional blending institutional strategy, documentary filmmaking and digital storytelling.
-    <div class="hero-cta">
+
+    <p class="hero-sub" id="hSub">
+      Bilingual communications professional blending institutional strategy, documentary filmmaking and digital storytelling. Currently at MRC Unit The Gambia — London School of Hygiene &amp; Tropical Medicine.
+    </p>
+
+    <div class="hero-ctas" id="hCtas">
       <a href="#work" class="btn btn-primary">View my work</a>
       <a href="#contact" class="btn btn-outline">Get in touch</a>
     </div>
   </div>
-  <div class="hero-right">
-    <div class="hero-stats">
-      <div class="stat-card">
-        <div class="stat-num">3+</div>
-        <div class="stat-label">Years in international institutions</div>
-        <div class="stat-sub">UNODC · MRC/LSHTM</div>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
-        <div class="stat-card">
-          <div class="stat-num">3</div>
-          <div class="stat-label">Films</div>
-          <div class="stat-sub">Full production</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-num">2</div>
-          <div class="stat-label">Languages</div>
-          <div class="stat-sub">FR · EN fluent</div>
-        </div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-num">M.Sc.</div>
-        <div class="stat-label">Communication Sciences</div>
-        <div class="stat-sub">KU Leuven · Digital Media & Society</div>
-      </div>
+
+  <!-- RIGHT: stat cards -->
+  <div class="hero-stats" id="hStats">
+    <!-- Full-width top card -->
+    <div class="hs-card">
+      <div class="hs-num">3+</div>
+      <div class="hs-label">Years in international institutions</div>
+      <div class="hs-sub">UNODC · MRC/LSHTM</div>
+    </div>
+    <!-- Two side-by-side cards -->
+    <div class="hs-card">
+      <div class="hs-num">3</div>
+      <div class="hs-label">Documentary films</div>
+      <div class="hs-sub">Full production</div>
+    </div>
+    <div class="hs-card">
+      <div class="hs-num">2</div>
+      <div class="hs-label">Languages</div>
+      <div class="hs-sub">FR · EN fluent</div>
+    </div>
+    <!-- Full-width bottom card -->
+    <div class="hs-card" style="grid-column:1/-1">
+      <div class="hs-num">M.Sc.</div>
+      <div class="hs-label">Communication Sciences</div>
+      <div class="hs-sub">KU Leuven · Digital Media &amp; Society</div>
     </div>
   </div>
 </section>
 
-<!-- WORK -->
-<section class="section" id="work">
-  <div class="label">Portfolio</div>
-  <h2 class="section-title">Selected work</h2>
-  <p class="section-intro">A selection of projects spanning documentary production, institutional communication strategy and digital content — all created for organisations making real impact in West Africa and beyond.</p>
-
-  <div class="filter-bar">
-    <button class="filter-btn active" onclick="filterProjects('all',this)">All</button>
-    <button class="filter-btn" onclick="filterProjects('film',this)">Film & Video</button>
-    <button class="filter-btn" onclick="filterProjects('comms',this)">Communications</button>
-    <button class="filter-btn" onclick="filterProjects('digital',this)">Digital</button>
+<!-- ══════════ SELECTED WORK ══════════ -->
+<!-- Grid layout identical to live site.
+     Videos replaced by thumbnails → click anywhere → modal autoplay. -->
+<section id="work" class="bg-white">
+  <div class="sec-header rv">
+    <div class="sec-eyebrow"><span>Portfolio</span></div>
+    <h2 class="sec-title">Selected work</h2>
+    <p class="sec-desc">A selection of projects spanning documentary production, institutional communication strategy and digital content — all created for organisations making real impact in West Africa and beyond.</p>
   </div>
 
-  <div class="projects" id="projects-grid">
+  <div class="filters rv">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="film">Film &amp; Video</button>
+    <button class="filter-btn" data-filter="comms">Communications</button>
+    <button class="filter-btn" data-filter="digital">Digital</button>
+  </div>
 
-    <div class="proj proj-col-8" data-cat="film">
-      <div class="proj-thumb" style="height:380px">
-        <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#0d3d2e,#1a5c45)">
-          <svg width="100%" height="100%" viewBox="0 0 600 380" xmlns="http://www.w3.org/2000/svg" style="opacity:0.4">
-            <circle cx="300" cy="190" r="60" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
-            <circle cx="300" cy="190" r="120" fill="none" stroke="#c8a84b" stroke-width="0.7" stroke-dasharray="4 8"/>
-            <circle cx="300" cy="190" r="180" fill="none" stroke="#c8a84b" stroke-width="0.4" stroke-dasharray="2 10"/>
-            <polygon points="285,168 285,212 325,190" fill="#c8a84b"/>
-          </svg>
+  <div class="work-grid" id="workGrid">
+
+    <!-- VIDEO: GBV Documentary -->
+    <div class="work-card rv" data-cat="film"
+         onclick="openModal('i0cR9EuhOp4','Documentary Film','Gender-Based Violence in Rural Gambia')">
+      <div class="vid-thumb">
+        <img src="https://img.youtube.com/vi/i0cR9EuhOp4/maxresdefault.jpg"
+             alt="Gender-Based Violence in Rural Gambia"
+             onerror="this.src='https://img.youtube.com/vi/i0cR9EuhOp4/hqdefault.jpg'">
+        <div class="play-overlay">
+          <div class="play-circle"><div class="play-triangle"></div></div>
         </div>
-        <div class="proj-thumb-overlay"></div>
-        <span class="proj-type">Documentary Film</span>
-        <div class="proj-info">
-          <h3 class="proj-title">Gender-Based Violence in Rural Gambia</h3>
-          <p class="proj-desc">Full production documentary for Action Aid — development, shooting, sound design & post-production</p>
-          <a href="https://www.youtube.com/watch?v=i0cR9EuhOp4" target="_blank" class="proj-link">Watch film ›</a>
+        <div class="vid-hover-meta">
+          <div class="vhm-tag">Documentary Film</div>
+          <div class="vhm-title">Gender-Based Violence in Rural Gambia</div>
         </div>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Documentary Film</div>
+        <div class="card-title">Gender-Based Violence in Rural Gambia</div>
+        <div class="card-desc">Full production documentary for Action Aid — development, shooting, sound design &amp; post-production</div>
       </div>
     </div>
 
-    <div class="proj proj-col-4" data-cat="film">
-      <div class="proj-thumb" style="height:380px">
-        <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#1a3c6e,#2a5298)">
-          <svg width="100%" height="100%" viewBox="0 0 300 380" xmlns="http://www.w3.org/2000/svg" style="opacity:0.35">
-            <rect x="40" y="60" width="220" height="140" rx="8" fill="none" stroke="#fff" stroke-width="1.5"/>
-            <rect x="60" y="80" width="180" height="100" rx="4" fill="rgba(255,255,255,0.08)"/>
-            <line x1="40" y1="240" x2="260" y2="240" stroke="#fff" stroke-width="1" stroke-dasharray="6 4"/>
-            <circle cx="80" cy="280" r="20" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
-            <circle cx="150" cy="280" r="20" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
-            <circle cx="220" cy="280" r="20" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
-          </svg>
+    <!-- VIDEO: Kololi Beach Resort -->
+    <div class="work-card rv d1" data-cat="film"
+         onclick="openModal('NbCgR2BaSiI','Commercial','Kololi Beach Resort')">
+      <div class="vid-thumb">
+        <img src="https://img.youtube.com/vi/NbCgR2BaSiI/maxresdefault.jpg"
+             alt="Kololi Beach Resort"
+             onerror="this.src='https://img.youtube.com/vi/NbCgR2BaSiI/hqdefault.jpg'">
+        <div class="play-overlay">
+          <div class="play-circle"><div class="play-triangle"></div></div>
         </div>
-        <div class="proj-thumb-overlay"></div>
-        <span class="proj-type">Commercial</span>
-        <div class="proj-info">
-          <h3 class="proj-title">Kololi Beach Resort</h3>
-          <p class="proj-desc">Co-director & sound recordist — hotel advertisement</p>
-          <a href="https://www.youtube.com/watch?v=NbCgR2BaSiI" target="_blank" class="proj-link">Watch film ›</a>
+        <div class="vid-hover-meta">
+          <div class="vhm-tag">Commercial</div>
+          <div class="vhm-title">Kololi Beach Resort</div>
         </div>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Commercial</div>
+        <div class="card-title">Kololi Beach Resort</div>
+        <div class="card-desc">Co-director &amp; sound recordist — hotel advertisement</div>
       </div>
     </div>
 
-    <div class="proj proj-col-4" data-cat="film">
-      <div class="proj-thumb">
-        <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#2d1a0e,#6b3520)">
-          <svg width="100%" height="100%" viewBox="0 0 300 320" xmlns="http://www.w3.org/2000/svg" style="opacity:0.4">
-            <path d="M60 280 Q150 80 240 280" fill="none" stroke="#c8a84b" stroke-width="2"/>
-            <circle cx="60" cy="280" r="5" fill="#c8a84b"/>
-            <circle cx="240" cy="280" r="5" fill="#c8a84b"/>
-            <circle cx="150" cy="120" r="8" fill="#c8a84b" opacity="0.6"/>
-          </svg>
+    <!-- VIDEO: Wide Open Walls -->
+    <div class="work-card rv d2" data-cat="film"
+         onclick="openModal('lWFuv9N-LbA','Promo Film','Wide Open Walls')">
+      <div class="vid-thumb">
+        <img src="https://img.youtube.com/vi/lWFuv9N-LbA/maxresdefault.jpg"
+             alt="Wide Open Walls"
+             onerror="this.src='https://img.youtube.com/vi/lWFuv9N-LbA/hqdefault.jpg'">
+        <div class="play-overlay">
+          <div class="play-circle"><div class="play-triangle"></div></div>
         </div>
-        <div class="proj-thumb-overlay"></div>
-        <span class="proj-type">Promo Film</span>
-        <div class="proj-info">
-          <h3 class="proj-title">Wide Open Walls</h3>
-          <p class="proj-desc">Graffiti artist promotional video — image & sound</p>
-          <a href="https://www.youtube.com/watch?v=lWFuv9N-LbA" target="_blank" class="proj-link">Watch film ›</a>
+        <div class="vid-hover-meta">
+          <div class="vhm-tag">Promo Film</div>
+          <div class="vhm-title">Wide Open Walls</div>
         </div>
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Promo Film</div>
+        <div class="card-title">Wide Open Walls</div>
+        <div class="card-desc">Graffiti artist promotional video — image &amp; sound</div>
       </div>
     </div>
 
-    <div class="proj proj-col-8" data-cat="comms digital">
-      <div class="proj-thumb">
-        <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#04342c,#0d3d2e,#0f6e56)">
-          <svg width="100%" height="100%" viewBox="0 0 600 320" xmlns="http://www.w3.org/2000/svg" style="opacity:0.3">
-            <rect x="60" y="60" width="200" height="28" rx="4" fill="#9fe1cb"/>
-            <rect x="60" y="102" width="320" height="12" rx="3" fill="#5dcaa5" opacity="0.6"/>
-            <rect x="60" y="124" width="280" height="12" rx="3" fill="#5dcaa5" opacity="0.4"/>
-            <rect x="60" y="146" width="240" height="12" rx="3" fill="#5dcaa5" opacity="0.3"/>
-            <rect x="400" y="60" width="160" height="260" rx="8" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
-            <rect x="420" y="80" width="120" height="8" rx="2" fill="#9fe1cb" opacity="0.5"/>
-            <rect x="420" y="98" width="80" height="8" rx="2" fill="#9fe1cb" opacity="0.3"/>
-            <rect x="420" y="140" width="120" height="60" rx="4" fill="rgba(159,225,203,0.1)"/>
-            <circle cx="480" cy="220" r="25" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
-            <path d="M472 220 l6 6 l12-12" stroke="#c8a84b" stroke-width="2" fill="none"/>
-          </svg>
+    <!-- HDRWA Platform -->
+    <div class="work-card rv d1" data-cat="digital comms">
+      <div class="card-thumb-plain">
+        <div class="card-icon">
+          <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width=".9" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
         </div>
-        <div class="proj-thumb-overlay"></div>
-        <span class="proj-type">Strategy · Digital · Web</span>
-        <div class="proj-info">
-          <h3 class="proj-title">HDRWA Platform — Communications Strategy</h3>
-          <p class="proj-desc">End-to-end communications plan, website management (Drupal), social media & stakeholder reporting for MRC/LSHTM health data platform</p>
-          <a href="https://www.hdrwa.org/" target="_blank" class="proj-link">Visit platform ›</a>
-        </div>
+        <!-- Replace with: <img src="images/hdrwa.jpg" alt="HDRWA Platform"> -->
+      </div>
+      <div class="card-body">
+        <div class="card-tag">Strategy · Digital · Web</div>
+        <div class="card-title">HDRWA Platform — Communications Strategy</div>
+        <div class="card-desc">End-to-end communications plan, website management (Drupal), social media &amp; stakeholder reporting for MRC/LSHTM health data platform</div>
+        <a href="https://www.hdrwa.org/" target="_blank" class="card-link" onclick="event.stopPropagation()">
+          Visit platform <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
     </div>
 
-    <div class="proj proj-col-6" data-cat="comms">
-      <div class="proj-thumb">
-        <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#0d1a3a,#1a3c6e)">
-          <svg width="100%" height="100%" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" style="opacity:0.35">
-            <circle cx="200" cy="140" r="50" fill="none" stroke="#fff" stroke-width="1.5"/>
-            <circle cx="120" cy="220" r="35" fill="none" stroke="#c8a84b" stroke-width="1"/>
-            <circle cx="280" cy="220" r="35" fill="none" stroke="#c8a84b" stroke-width="1"/>
-            <line x1="160" y1="165" x2="145" y2="195" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-            <line x1="240" y1="165" x2="255" y2="195" stroke="rgba(255,255,255,0.3)" stroke-width="1"/>
-            <line x1="155" y1="220" x2="245" y2="220" stroke="rgba(255,255,255,0.2)" stroke-width="1" stroke-dasharray="4 4"/>
-          </svg>
+    <!-- UNODC Press -->
+    <div class="work-card rv d2" data-cat="comms">
+      <div class="card-thumb-plain">
+        <div class="card-icon">
+          <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width=".9" viewBox="0 0 24 24"><path d="M4 4h16v16H4zM8 9h8M8 13h6"/></svg>
         </div>
-        <div class="proj-thumb-overlay"></div>
-        <span class="proj-type">UN · Communications</span>
-        <div class="proj-info">
-          <h3 class="proj-title">UNODC The Gambia — Press & Reporting</h3>
-          <p class="proj-desc">Newsletters & event communication across Gambia</p>
-          <a href="#contact" class="proj-link">Request samples ›</a>
-        </div>
+        <!-- Replace with: <img src="images/unodc-press.jpg" alt="UNODC Press"> -->
+      </div>
+      <div class="card-body">
+        <div class="card-tag">UN · Communications</div>
+        <div class="card-title">UNODC The Gambia — Press &amp; Reporting</div>
+        <div class="card-desc">Newsletters &amp; event communication across Gambia</div>
+        <a href="#contact" class="card-link" onclick="event.stopPropagation()">
+          Request samples <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
     </div>
 
-    <div class="proj proj-col-6" data-cat="comms">
-      <div class="proj-thumb">
-        <div class="proj-thumb-bg" style="background:linear-gradient(135deg,#2d0e1a,#7a1a35)">
-          <svg width="100%" height="100%" viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" style="opacity:0.35">
-            <rect x="80" y="80" width="240" height="180" rx="6" fill="none" stroke="#c8a84b" stroke-width="1.5"/>
-            <line x1="80" y1="120" x2="320" y2="120" stroke="#c8a84b" stroke-width="0.8" stroke-dasharray="3 6"/>
-            <rect x="110" y="140" width="60" height="30" rx="3" fill="rgba(200,168,75,0.15)" stroke="rgba(200,168,75,0.4)" stroke-width="1"/>
-            <rect x="190" y="140" width="60" height="30" rx="3" fill="rgba(200,168,75,0.15)" stroke="rgba(200,168,75,0.4)" stroke-width="1"/>
-            <rect x="110" y="190" width="140" height="12" rx="3" fill="rgba(255,255,255,0.15)"/>
-            <rect x="110" y="212" width="100" height="12" rx="3" fill="rgba(255,255,255,0.1)"/>
-          </svg>
+    <!-- Abidjan Workshop -->
+    <div class="work-card rv d3" data-cat="comms">
+      <div class="card-thumb-plain">
+        <div class="card-icon">
+          <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width=".9" viewBox="0 0 24 24"><path d="M17 20H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h6l6 6v8a2 2 0 0 1-2 2z"/><path d="M13 4v6h6"/></svg>
         </div>
-        <div class="proj-thumb-overlay"></div>
-        <span class="proj-type">Events · Logistics</span>
-        <div class="proj-info">
-          <h3 class="proj-title">International Workshop Abidjan — UNODC</h3>
-          <p class="proj-desc">Full event communication: banners, press release, badges, social coverage for judicial cooperation summit</p>
-          <a href="#contact" class="proj-link">Request samples ›</a>
-        </div>
+        <!-- Replace with: <img src="images/abidjan.jpg" alt="Abidjan Workshop"> -->
       </div>
+      <div class="card-body">
+        <div class="card-tag">Events · Logistics</div>
+        <div class="card-title">International Workshop Abidjan — UNODC</div>
+        <div class="card-desc">Full event communication: banners, press release, badges, social coverage for judicial cooperation summit</div>
+        <a href="#contact" class="card-link" onclick="event.stopPropagation()">
+          Request samples <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
+  </div><!-- /work-grid -->
+</section>
+
+<!-- VIDEO MODAL -->
+<div class="modal-wrap" id="videoModal" onclick="closeModal(event)">
+  <div class="modal-inner">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-video">
+      <iframe id="modalIframe" src="" title=""
+        allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+    <div class="modal-meta">
+      <div class="modal-tag"  id="modalTag"></div>
+      <div class="modal-title" id="modalTitle"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ VISUAL WORK — NEW SECTION ══════════ -->
+<!-- Add your images: create images/ folder, upload files,
+     replace .gi-placeholder divs with <img src="images/…" alt="…"> -->
+<section id="visual" class="bg-alt">
+  <div class="sec-header rv">
+    <div class="sec-eyebrow"><span>Photography &amp; Graphics</span></div>
+    <h2 class="sec-title">Visual work</h2>
+    <p class="sec-desc">Photography, graphic design and field visuals created across West Africa and international institutions.</p>
+  </div>
+
+  <div class="filters rv">
+    <button class="filter-btn active" data-gfilter="all">All</button>
+    <button class="filter-btn" data-gfilter="photo">Photography</button>
+    <button class="filter-btn" data-gfilter="graphic">Graphics &amp; Design</button>
+    <button class="filter-btn" data-gfilter="field">Field Visuals</button>
+  </div>
+
+  <div class="gallery-grid rv" id="galleryGrid">
+
+    <div class="gi gw5 gh2" data-gt="photo" data-cap="Field photography · The Gambia" data-cat="Photography" onclick="openLightbox(this)">
+      <div class="gi-placeholder">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M3 9a2 2 0 0 1 2-2h.5L7 5h10l1.5 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/></svg>
+        <span>Add photo 1</span>
+      </div>
+      <span class="gi-badge">Photo</span>
+      <div class="gi-caption">Field photography · The Gambia</div>
+    </div>
+
+    <div class="gi gw4" data-gt="photo" data-cap="Documentary still · ActionAid" data-cat="Photography" onclick="openLightbox(this)">
+      <div class="gi-placeholder">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M3 9a2 2 0 0 1 2-2h.5L7 5h10l1.5 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/></svg>
+        <span>Add photo 2</span>
+      </div>
+      <span class="gi-badge">Photo</span>
+      <div class="gi-caption">Documentary still · ActionAid</div>
+    </div>
+
+    <div class="gi gw3" data-gt="graphic" data-cap="Event banner · UNODC Abidjan" data-cat="Graphic Design" onclick="openLightbox(this)">
+      <div class="gi-placeholder">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <span>Add graphic 1</span>
+      </div>
+      <span class="gi-badge">Graphic</span>
+      <div class="gi-caption">Event banner · UNODC Abidjan</div>
+    </div>
+
+    <div class="gi gw4" data-gt="graphic" data-cap="Newsletter design · UNODC" data-cat="Graphic Design" onclick="openLightbox(this)">
+      <div class="gi-placeholder">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <span>Add graphic 2</span>
+      </div>
+      <span class="gi-badge">Graphic</span>
+      <div class="gi-caption">Newsletter design · UNODC</div>
+    </div>
+
+    <div class="gi gw3" data-gt="field" data-cap="Wide Open Walls · Banjul" data-cat="Field Visual" onclick="openLightbox(this)">
+      <div class="gi-placeholder">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M3 9a2 2 0 0 1 2-2h.5L7 5h10l1.5 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/></svg>
+        <span>Add photo 3</span>
+      </div>
+      <span class="gi-badge">Field</span>
+      <div class="gi-caption">Wide Open Walls · Banjul</div>
+    </div>
+
+    <div class="gi gw6" data-gt="graphic" data-cap="Social media content · MRC/LSHTM" data-cat="Graphic Design" onclick="openLightbox(this)">
+      <div class="gi-placeholder">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <span>Add graphic 3</span>
+      </div>
+      <span class="gi-badge">Graphic</span>
+      <div class="gi-caption">Social media content · MRC/LSHTM</div>
+    </div>
+
+    <div class="gi gw6" data-gt="field" data-cap="Workshop · Abidjan 2022" data-cat="Field Visual" onclick="openLightbox(this)">
+      <div class="gi-placeholder">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M3 9a2 2 0 0 1 2-2h.5L7 5h10l1.5 2H19a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9z"/></svg>
+        <span>Add photo 4</span>
+      </div>
+      <span class="gi-badge">Field</span>
+      <div class="gi-caption">Workshop · Abidjan 2022</div>
     </div>
 
   </div>
 </section>
 
-<!-- SKILLS -->
-<section class="section section-alt" id="skills">
-  <div class="label">Expertise</div>
-  <h2 class="section-title">Skills & tools</h2>
-  <p class="section-intro">A dual background in communication sciences and audiovisual production gives me an unusual range — from crafting a donor report to directing a documentary.</p>
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <div class="lb-inner">
+    <button class="lb-close" onclick="closeLightbox()">✕</button>
+    <img src="" alt="" id="lbImg">
+    <div class="lb-meta">
+      <div class="lb-cat" id="lbCat"></div>
+      <div class="lb-cap" id="lbCap"></div>
+    </div>
+  </div>
+</div>
 
+<!-- ══════════ MEASURABLE IMPACT — NEW SECTION ══════════ -->
+<!-- KPIs only — count-up animation on scroll into view -->
+<section id="impact" class="bg-white">
+  <div class="sec-header rv">
+    <div class="sec-eyebrow"><span>Impact &amp; Results</span></div>
+    <h2 class="sec-title">Measurable impact</h2>
+    <p class="sec-desc">Communications work that reaches real audiences across West Africa and beyond — in numbers.</p>
+  </div>
+  <div class="impact-grid rv" id="impactGrid">
+    <div class="impact-stat">
+      <div class="impact-num" data-target="12" data-suffix="+">0</div>
+      <div class="impact-label">Institutional Reports</div>
+      <div class="impact-desc">Published for UNODC &amp; MRC/LSHTM audiences</div>
+    </div>
+    <div class="impact-stat">
+      <div class="impact-num" data-target="5" data-suffix="">0</div>
+      <div class="impact-label">Countries Covered</div>
+      <div class="impact-desc">West Africa: Gambia, Côte d'Ivoire &amp; beyond</div>
+    </div>
+    <div class="impact-stat">
+      <div class="impact-num" data-target="3" data-suffix="">0</div>
+      <div class="impact-label">Full Films Produced</div>
+      <div class="impact-desc">From concept to final delivery</div>
+    </div>
+    <div class="impact-stat">
+      <div class="impact-num" data-target="4" data-suffix="+">0</div>
+      <div class="impact-label">International Events</div>
+      <div class="impact-desc">UN workshops, summits &amp; partner meetings</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ SKILLS ══════════ -->
+<section id="skills" class="bg-alt">
+  <div class="sec-header rv">
+    <div class="sec-eyebrow"><span>Expertise</span></div>
+    <h2 class="sec-title">Skills &amp; tools</h2>
+    <p class="sec-desc">A dual background in communication sciences and audiovisual production gives me an unusual range — from crafting a donor report to directing a documentary.</p>
+  </div>
   <div class="skills-layout">
-    <div>
-      <div class="skill-group">
-        <div class="skill-group-title">Communication</div>
-        <div class="skill-item">
-          <div class="skill-name-row"><span class="skill-name">Strategic communication planning</span><span class="skill-pct">95%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-w="95"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name-row"><span class="skill-name">Press releases & editorial writing</span><span class="skill-pct">92%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-w="92"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name-row"><span class="skill-name">Stakeholder & partner coordination</span><span class="skill-pct">90%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-w="90"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name-row"><span class="skill-name">Social media management</span><span class="skill-pct">85%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-w="85"></div></div>
-        </div>
-      </div>
-      <div class="skill-group">
-        <div class="skill-group-title">Audiovisual</div>
-        <div class="skill-item">
-          <div class="skill-name-row"><span class="skill-name">Film direction & production</span><span class="skill-pct">90%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-w="90"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name-row"><span class="skill-name">Video editing (Premiere Pro)</span><span class="skill-pct">88%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-w="88"></div></div>
-        </div>
-        <div class="skill-item">
-          <div class="skill-name-row"><span class="skill-name">Sound recording & mixing</span><span class="skill-pct">85%</span></div>
-          <div class="skill-bar"><div class="skill-fill" data-w="85"></div></div>
-        </div>
-      </div>
+    <div class="rv">
+      <div class="skills-group-title">Communication</div>
+      <div class="skill-row"><div class="skill-top"><span class="skill-name">Strategic communication planning</span><span class="skill-pct">95%</span></div><div class="skill-track"><div class="skill-fill" data-w="95"></div></div></div>
+      <div class="skill-row"><div class="skill-top"><span class="skill-name">Press releases &amp; editorial writing</span><span class="skill-pct">92%</span></div><div class="skill-track"><div class="skill-fill" data-w="92"></div></div></div>
+      <div class="skill-row"><div class="skill-top"><span class="skill-name">Stakeholder &amp; partner coordination</span><span class="skill-pct">90%</span></div><div class="skill-track"><div class="skill-fill" data-w="90"></div></div></div>
+      <div class="skill-row"><div class="skill-top"><span class="skill-name">Social media management</span><span class="skill-pct">85%</span></div><div class="skill-track"><div class="skill-fill" data-w="85"></div></div></div>
+      <div class="skills-group-title" style="margin-top:2.5rem">Audiovisual</div>
+      <div class="skill-row"><div class="skill-top"><span class="skill-name">Film direction &amp; production</span><span class="skill-pct">90%</span></div><div class="skill-track"><div class="skill-fill" data-w="90"></div></div></div>
+      <div class="skill-row"><div class="skill-top"><span class="skill-name">Video editing (Premiere Pro)</span><span class="skill-pct">88%</span></div><div class="skill-track"><div class="skill-fill" data-w="88"></div></div></div>
+      <div class="skill-row"><div class="skill-top"><span class="skill-name">Sound recording &amp; mixing</span><span class="skill-pct">85%</span></div><div class="skill-track"><div class="skill-fill" data-w="85"></div></div></div>
     </div>
-
-    <div class="skills-right">
-      <h3>Tools & platforms</h3>
-      <p>Software and platforms I use daily — from content creation to project management.</p>
-      <div class="tools-grid">
-        <span class="tool-pill">Adobe Premiere Pro</span>
-        <span class="tool-pill">Final Cut Pro</span>
-        <span class="tool-pill">Pro Tools</span>
-        <span class="tool-pill">Lightroom</span>
-        <span class="tool-pill">Canva</span>
-        <span class="tool-pill">Drupal CMS</span>
-        <span class="tool-pill">Mailchimp</span>
-        <span class="tool-pill">MS Office</span>
-        <span class="tool-pill">Google Analytics</span>
-        <span class="tool-pill">WordPress</span>
+    <div class="rv d2">
+      <div class="skills-group-title">Tools &amp; platforms</div>
+      <div class="tools-list">
+        <span class="tool-chip">Adobe Premiere Pro</span>
+        <span class="tool-chip">Final Cut Pro</span>
+        <span class="tool-chip">Pro Tools</span>
+        <span class="tool-chip">Lightroom</span>
+        <span class="tool-chip">Canva</span>
+        <span class="tool-chip">Drupal CMS</span>
+        <span class="tool-chip">Mailchimp</span>
+        <span class="tool-chip">MS Office</span>
+        <span class="tool-chip">Google Analytics</span>
+        <span class="tool-chip">WordPress</span>
       </div>
-      <div style="margin-top:32px;padding-top:28px;border-top:1px solid rgba(255,255,255,0.1)">
-        <div class="skill-group-title" style="color:rgba(255,255,255,0.4);margin-bottom:14px">Languages</div>
-        <div style="display:flex;flex-direction:column;gap:10px">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:0.9rem;color:#fff">French</span>
-            <span style="font-size:0.78rem;background:rgba(200,168,75,0.2);color:var(--gold);padding:3px 12px;border-radius:20px">Native</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:0.9rem;color:#fff">English</span>
-            <span style="font-size:0.78rem;background:rgba(200,168,75,0.2);color:var(--gold);padding:3px 12px;border-radius:20px">Fluent · C1/C2</span>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <span style="font-size:0.9rem;color:rgba(255,255,255,0.5)">Spanish · Wolof</span>
-            <span style="font-size:0.78rem;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.4);padding:3px 12px;border-radius:20px">Basic</span>
-          </div>
-        </div>
+      <div style="margin-top:2.5rem">
+        <div class="skills-group-title">Languages</div>
+        <div class="lang-row"><span class="lang-name">French</span><span class="lang-level">Native</span></div>
+        <div class="lang-row"><span class="lang-name">English</span><span class="lang-level">Fluent · C1/C2</span></div>
+        <div class="lang-row"><span class="lang-name">Spanish · Wolof</span><span class="lang-level">Basic</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- JOURNEY -->
-<section class="section" id="journey">
-  <div class="label">Background</div>
-  <h2 class="section-title">The journey</h2>
-  <p class="section-intro">From Brussels film school to UN offices and international health research — a path built on storytelling, communication and a desire to work where it matters.</p>
-
+<!-- ══════════ JOURNEY ══════════ -->
+<section id="journey" class="bg-white">
+  <div class="sec-header rv">
+    <div class="sec-eyebrow"><span>Background</span></div>
+    <h2 class="sec-title">The journey</h2>
+    <p class="sec-desc">From Brussels film school to UN offices and international health research — a path built on storytelling, communication and a desire to work where it matters.</p>
+  </div>
   <div class="timeline">
-    <div class="tl-item">
-      <div class="tl-dates"><span>2023 — 2026</span><small>Banjul, Gambia</small></div>
-      <div class="tl-body">
-        <div class="tl-role">Administrative & Communications Manager</div>
-        <div class="tl-org">MRC Unit The Gambia — London School of Hygiene & Tropical Medicine</div>
-        <div class="tl-desc">Communications strategy for the Health Data Research West Africa platform. Website (Drupal), social media, press materials, stakeholder coordination and compliance management.</div>
-      </div>
+    <div class="timeline-item rv">
+      <div class="t-dot"></div>
+      <div class="t-period">2023 — 2026 · Banjul, Gambia</div>
+      <div class="t-role">Administrative &amp; Communications Manager</div>
+      <div class="t-org">MRC Unit The Gambia — London School of Hygiene &amp; Tropical Medicine</div>
+      <div class="t-desc">Communications strategy for the Health Data Research West Africa platform. Website (Drupal), social media, press materials, stakeholder coordination and compliance management.</div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dates"><span>Nov–Dec 2022</span><small>Banjul, The Gambia</small></div>
-      <div class="tl-body">
-        <div class="tl-role">International Consultant — Communications</div>
-        <div class="tl-org">UNODC — United Nations Office on Drugs and Crime</div>
-        <div class="tl-desc">Official communication materials, multilingual content production, partner facilitation and workshop organisation across West Africa.</div>
-      </div>
+    <div class="timeline-item rv d1">
+      <div class="t-dot"></div>
+      <div class="t-period">Nov–Dec 2022 · Banjul, The Gambia</div>
+      <div class="t-role">International Consultant — Communications</div>
+      <div class="t-org">UNODC — United Nations Office on Drugs and Crime</div>
+      <div class="t-desc">Official communication materials, multilingual content production, partner facilitation and workshop organisation across West Africa.</div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dates"><span>2021–2022</span><small>Banjul, The Gambia</small></div>
-      <div class="tl-body">
-        <div class="tl-role">Communication Intern — Drug Control & Crime Prevention</div>
-        <div class="tl-org">UNODC — United Nations Office on Drugs and Crime</div>
-        <div class="tl-desc">Public information materials, newsletter writing and translation, international workshop support in Abidjan.</div>
-      </div>
+    <div class="timeline-item rv d2">
+      <div class="t-dot"></div>
+      <div class="t-period">2021–2022 · Banjul, The Gambia</div>
+      <div class="t-role">Communication Intern — Drug Control &amp; Crime Prevention</div>
+      <div class="t-org">UNODC — United Nations Office on Drugs and Crime</div>
+      <div class="t-desc">Public information materials, newsletter writing and translation, international workshop support in Abidjan.</div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dates"><span>2019–2022</span><small>Leuven, Belgium</small></div>
-      <div class="tl-body">
-        <div class="tl-role">M.Sc. Communication Sciences — Digital Media & Society</div>
-        <div class="tl-org">KU Leuven</div>
-        <div class="tl-desc">Specialisation in digital communication, media theory and societal impact of communication technologies.</div>
-      </div>
+    <div class="timeline-item rv d3">
+      <div class="t-dot"></div>
+      <div class="t-period">2019–2022 · Leuven, Belgium</div>
+      <div class="t-role">M.Sc. Communication Sciences — Digital Media &amp; Society</div>
+      <div class="t-org">KU Leuven</div>
+      <div class="t-desc">Specialisation in digital communication, media theory and societal impact of communication technologies.</div>
     </div>
-    <div class="tl-item">
-      <div class="tl-dates"><span>2014–2019</span><small>Brussels, Belgium</small></div>
-      <div class="tl-body">
-        <div class="tl-role">Bachelor — Image Techniques, Cinematography</div>
-        <div class="tl-org">INRACI — Haute École Libre de Bruxelles</div>
-        <div class="tl-desc">Complete audiovisual production training — development, pre-production, shooting, editing and post-production.</div>
-      </div>
+    <div class="timeline-item rv d4">
+      <div class="t-dot"></div>
+      <div class="t-period">2014–2019 · Brussels, Belgium</div>
+      <div class="t-role">Bachelor — Image Techniques, Cinematography</div>
+      <div class="t-org">INRACI — Haute École Libre de Bruxelles</div>
+      <div class="t-desc">Complete audiovisual production training — development, pre-production, shooting, editing and post-production.</div>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
-<section class="section" id="contact">
-  <div class="contact-wrap">
-    <div class="contact-left">
-      <h2>Let's build something that matters.</h2>
-      <p>Available for communications, project management and audiovisual production roles — in The Gambia and internationally. Open to NGO, UN, and development sector opportunities.</p>
-    </div>
-    <div class="contact-links">
-      <a href="mailto:[thomas.bresseleers@hotmail.com]" class="contact-item">
-        <div class="contact-icon">✉</div>
-        <div class="contact-item-text">
-          <strong>thomas.bresseleers@hotmail.com</strong>
-          <span>Send me an email</span>
-        </div>
-      </a>
-      <a href="#work" class="contact-item">
-        <div class="contact-icon">▶</div>
-        <div class="contact-item-text">
-          <strong>View my films on YouTube</strong>
-          <span>Documentary & commercial work</span>
-        </div>
-      </a>
-    </div>
+<!-- ══════════ CONTACT ══════════ -->
+<section id="contact" class="bg-alt">
+  <div class="rv">
+    <div class="contact-big">Let's build something<br>that <em>matters.</em></div>
+    <p class="contact-sub">Available for communications, project management and audiovisual production roles — in The Gambia and internationally. Open to NGO, UN, and development sector opportunities.</p>
+  </div>
+  <div class="contact-cards rv d2">
+    <a href="mailto:thomas.bresseleers@hotmail.com" class="contact-card">
+      <div class="cc-icon">✉</div>
+      <div>
+        <div class="cc-label">Email</div>
+        <div class="cc-val">thomas.bresseleers@hotmail.com</div>
+      </div>
+    </a>
+    <a href="#work" class="contact-card">
+      <div class="cc-icon">▶</div>
+      <div>
+        <div class="cc-label">Films</div>
+        <div class="cc-val">View my films on YouTube</div>
+      </div>
+    </a>
   </div>
 </section>
 
-<footer>© 2026 Thomas Bresseleers · Communications & Visual Storytelling · Banjul, The Gambia</footer>
+<footer>
+  <span>© 2026 Thomas Bresseleers · Communications &amp; Visual Storytelling · Banjul, The Gambia</span>
+  <span>Brussels · Banjul · Beyond</span>
+</footer>
 
 <script>
-function filterProjects(cat, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  document.querySelectorAll('.proj').forEach(p => {
-    const cats = p.dataset.cat || '';
-    if (cat === 'all' || cats.includes(cat)) {
-      p.style.display = '';
-      p.style.opacity = '0';
-      p.style.transform = 'translateY(20px)';
-      setTimeout(() => { p.style.transition = 'opacity .4s, transform .4s'; p.style.opacity = '1'; p.style.transform = ''; }, 20);
-    } else {
-      p.style.display = 'none';
+/* ═══════════════════════════════════════════════
+   CURSOR
+   ═══════════════════════════════════════════════ */
+const cur  = document.getElementById('cur');
+const cur2 = document.getElementById('cur2');
+let mx = 0, my = 0, cx = 0, cy = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+});
+(function tickCur2() {
+  cx += (mx - cx) * .1; cy += (my - cy) * .1;
+  cur2.style.left = cx + 'px'; cur2.style.top = cy + 'px';
+  requestAnimationFrame(tickCur2);
+})();
+document.querySelectorAll('a, button, .work-card, .gi').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hov'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hov'));
+});
+document.addEventListener('mousedown', () => document.body.classList.add('click'));
+document.addEventListener('mouseup',   () => document.body.classList.remove('click'));
+
+/* ═══════════════════════════════════════════════
+   NAV — frosted glass on scroll
+   ═══════════════════════════════════════════════ */
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', scrollY > 40);
+});
+
+/* ═══════════════════════════════════════════════
+   HERO ENTRANCE — word-by-word
+   ═══════════════════════════════════════════════ */
+setTimeout(() => {
+  document.getElementById('hLabel').classList.add('in');
+  document.querySelectorAll('.hw-i').forEach((w, i) =>
+    setTimeout(() => w.classList.add('in'), i * 90 + 120)
+  );
+  setTimeout(() => document.getElementById('hSub')  .classList.add('in'), 560);
+  setTimeout(() => document.getElementById('hCtas') .classList.add('in'), 730);
+  setTimeout(() => document.getElementById('hStats').classList.add('in'), 900);
+}, 80);
+
+/* ═══════════════════════════════════════════════
+   SCROLL REVEAL — IntersectionObserver
+   ═══════════════════════════════════════════════ */
+const revealObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('in') });
+}, { threshold: .08 });
+document.querySelectorAll('.rv').forEach(el => revealObs.observe(el));
+
+/* ═══════════════════════════════════════════════
+   SKILL BARS — animate when visible
+   ═══════════════════════════════════════════════ */
+const skillObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting)
+      e.target.querySelectorAll('.skill-fill').forEach(b => b.style.width = b.dataset.w + '%');
+  });
+}, { threshold: .15 });
+document.querySelectorAll('.skills-layout').forEach(el => skillObs.observe(el));
+
+/* ═══════════════════════════════════════════════
+   IMPACT — count-up animation
+   ═══════════════════════════════════════════════ */
+function countUp(el) {
+  const target = +el.dataset.target, suffix = el.dataset.suffix || '';
+  let v = 0;
+  const dur = 1600, step = 16;
+  const t = setInterval(() => {
+    v += target / (dur / step);
+    if (v >= target) { el.textContent = target + suffix; clearInterval(t); return; }
+    el.textContent = Math.floor(v) + suffix;
+  }, step);
+}
+const impactObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.querySelectorAll('.impact-num').forEach(el => countUp(el));
+      impactObs.unobserve(e.target);
     }
   });
-}
+}, { threshold: .2 });
+const ig = document.getElementById('impactGrid');
+if (ig) impactObs.observe(ig);
 
-function animateBars() {
-  const bars = document.querySelectorAll('.skill-fill');
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const el = e.target;
-        el.style.width = el.dataset.w + '%';
-        observer.unobserve(el);
-      }
+/* ═══════════════════════════════════════════════
+   WORK FILTER
+   ═══════════════════════════════════════════════ */
+document.querySelectorAll('#work .filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#work .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    document.querySelectorAll('#workGrid .work-card').forEach(card => {
+      const show = f === 'all' || card.dataset.cat.includes(f);
+      card.style.opacity    = show ? '1' : '0.2';
+      card.style.pointerEvents = show ? '' : 'none';
     });
-  }, { threshold: 0.3 });
-  bars.forEach(b => observer.observe(b));
+  });
+});
+
+/* ═══════════════════════════════════════════════
+   GALLERY FILTER
+   ═══════════════════════════════════════════════ */
+document.querySelectorAll('#visual .filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#visual .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.gfilter;
+    document.querySelectorAll('#galleryGrid .gi').forEach(card => {
+      card.style.display = (f === 'all' || card.dataset.gt === f) ? '' : 'none';
+    });
+  });
+});
+
+/* ═══════════════════════════════════════════════
+   VIDEO MODAL — click anywhere on card → autoplay
+   ═══════════════════════════════════════════════ */
+function openModal(id, tag, title) {
+  const wrap = document.getElementById('videoModal');
+  document.getElementById('modalIframe').src =
+    `https://www.youtube.com/embed/${id}?autoplay=1&rel=0&modestbranding=1`;
+  document.getElementById('modalTag').textContent   = tag;
+  document.getElementById('modalTitle').textContent = title;
+  wrap.style.display = 'flex';
+  /* double rAF ensures transition fires after display:flex */
+  requestAnimationFrame(() => requestAnimationFrame(() => wrap.classList.add('open')));
 }
 
-window.addEventListener('load', animateBars);
+function closeModal(e) {
+  /* only close if clicking backdrop or close button */
+  if (e && e.target !== document.getElementById('videoModal') &&
+      !e.target.classList.contains('modal-close')) return;
+  const wrap = document.getElementById('videoModal');
+  wrap.classList.remove('open');
+  setTimeout(() => {
+    wrap.style.display = 'none';
+    document.getElementById('modalIframe').src = ''; /* stop video */
+  }, 310);
+}
+
+/* ═══════════════════════════════════════════════
+   LIGHTBOX — smooth scale+fade
+   ═══════════════════════════════════════════════ */
+function openLightbox(el) {
+  const img = el.querySelector('img');
+  if (!img) return; /* only opens when real image present */
+  document.getElementById('lbImg').src = img.src;
+  document.getElementById('lbImg').alt = img.alt;
+  document.getElementById('lbCap').textContent = el.dataset.cap || '';
+  document.getElementById('lbCat').textContent = el.dataset.cat || '';
+  const lb = document.getElementById('lightbox');
+  lb.style.display = 'flex';
+  requestAnimationFrame(() => requestAnimationFrame(() => lb.classList.add('open')));
+}
+
+function closeLightbox(e) {
+  if (e && e.target !== document.getElementById('lightbox') &&
+      !e.target.classList.contains('lb-close')) return;
+  const lb = document.getElementById('lightbox');
+  lb.classList.remove('open');
+  setTimeout(() => lb.style.display = 'none', 340);
+}
+
+/* ESC closes both modal and lightbox */
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  closeModal({ target: document.getElementById('videoModal') });
+  closeLightbox({ target: document.getElementById('lightbox') });
+});
 </script>
 </body>
 </html>
