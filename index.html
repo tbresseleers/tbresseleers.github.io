@@ -1270,16 +1270,15 @@ function closeModal(e) {
    ═══════════════════════════════════════════════ */
 function openLightbox(el) {
   const img = el.querySelector('img');
-  if (!img) return; /* only opens when real image present */
-  document.getElementById('lbImg').src = img.src;
-  document.getElementById('lbImg').alt = img.alt;
+  const src = el.dataset.img || (img ? img.src : '');
+  if (!src) return;
+  document.getElementById('lbImg').src = src;
   document.getElementById('lbCap').textContent = el.dataset.cap || '';
   document.getElementById('lbCat').textContent = el.dataset.cat || '';
   const lb = document.getElementById('lightbox');
   lb.style.display = 'flex';
   requestAnimationFrame(() => requestAnimationFrame(() => lb.classList.add('open')));
 }
-
 function closeLightbox(e) {
   if (e && e.target !== document.getElementById('lightbox') &&
       !e.target.classList.contains('lb-close')) return;
